@@ -25,7 +25,7 @@ final ThemeData darkTheme = ThemeData(
         fontWeight: FontWeight.bold,
       ),
     ),
-    textTheme: textTheme.apply(bodyColor: AppColors.darkTextColor),
+    textTheme: textTheme.apply(bodyColor: AppColors.lightTextColor),
     buttonTheme: const ButtonThemeData(
       buttonColor: AppColors.primaryColor,
       textTheme: ButtonTextTheme.primary,
