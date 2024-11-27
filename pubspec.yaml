@@ -21,6 +21,8 @@ dependencies:
   flutter_vector_icons: ^2.0.0
   iconsax: ^0.0.8
   google_fonts: ^6.2.1
+  google_nav_bar: ^5.0.7
+  flutter_svg: ^1.1.6
 
 
 dev_dependencies:
@@ -42,6 +44,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/
 
   
   # fonts:

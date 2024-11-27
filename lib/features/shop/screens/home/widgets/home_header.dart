@@ -38,7 +38,7 @@ class _MyHeaderState extends State<MyHeader> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(color: AppColors.primaryColor),
+                        .copyWith(color: AppColors.primaryColor,fontWeight: FontWeight.w600),
                   ),
                   Text(
                     'Parakunnam  678001',

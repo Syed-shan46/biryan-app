@@ -29,9 +29,9 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (settings) {
           return switch (settings.name) {
             'home' => NoAnimationTransition(
-                builder: (context) => const NavigationMenu()),
+                builder: (context) =>  NavigationMenu()),
             _ => NoAnimationTransition(
-                builder: (context) => const NavigationMenu())
+                builder: (context) =>  NavigationMenu())
           };
         },
       ),

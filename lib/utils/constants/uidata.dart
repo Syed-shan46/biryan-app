@@ -36,13 +36,12 @@ List<dynamic> categories = [
   },
 ];
 
-const restaurants = [
+List<dynamic> restaurants = [
   {
     "_id": "6530ebbcc9e72013e5b65933",
     "title": "Lapisara Eatery",
     "time": "6:00am - 9:00pm",
-    "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+    "imageUrl":"assets/images/cb.jpg",
     "owner": "fdfsdfsdfs",
     "code": "41007428",
     "logoUrl":
@@ -63,8 +62,7 @@ const restaurants = [
     "_id": "6530ea6bc9e72013e5b6592d",
     "title": "Burger King",
     "time": "6:00am - 9:00pm",
-    "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+    "imageUrl":"assets/images/mb.jpg",
     "owner": "sjgdsjgfjshhjs",
     "code": "41007428",
     "logoUrl":
@@ -85,8 +83,7 @@ const restaurants = [
     "_id": "6530eb66c9e72013e5b65931",
     "title": "La Foods",
     "time": "6:00am - 9:00pm",
-    "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+    "imageUrl":"assets/images/bb.jpg",
     "owner": "fgdgdfgd",
     "code": "41007428",
     "logoUrl":
@@ -103,34 +100,13 @@ const restaurants = [
       "longitudeDelta": 0.0221
     }
   },
-  {
-    "_id": "6530eb23c9e72013e5b6592f",
-    "title": "Italian Restaurant",
-    "time": "6:00am - 9:00pm",
-    "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
-    "owner": "sjgdsjgfjshhjs",
-    "code": "41007428",
-    "logoUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
-    "rating": 5,
-    "ratingCount": "3278",
-    "coords": {
-      "id": "2021",
-      "latitude": 37.78557922976825,
-      "longitude": -122.40722000299483,
-      "address": "333 O'Farrell St, San Francisco, CA 94102, United States",
-      "title": "Italian Restaurant",
-      "latitudeDelta": 0.0122,
-      "longitudeDelta": 0.0221
-    }
-  }
+  
 ];
 
 List<Map<String, dynamic>> foods = [
   {
     "_id": "65316968f94c6496dc84f3c1",
-    "title": "Tiramisu",
+    "title": "Chicken Biriyani",
     "foodTags": ["Italian", "Dessert", "Coffee", "Mascarpone", "Cocoa"],
     "foodType": ["Dessert"],
     "code": "41007428",
@@ -149,14 +125,14 @@ List<Map<String, dynamic>> foods = [
       {"id": 5, "title": "Sugar", "price": "0.50"}
     ],
     "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "assets/images/cb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "35 min"
   },
   {
     "_id": "653168e9f94c6496dc84f3bf",
-    "title": "Spaghetti Carbonara",
+    "title": "Mutton Biriyani",
     "foodTags": ["Italian", "Creamy", "Pasta", "Bacon", "Egg"],
     "foodType": ["Main Course", "Lunch", null],
     "code": "41007428",
@@ -175,14 +151,14 @@ List<Map<String, dynamic>> foods = [
       {"id": 5, "title": "Pasta", "price": "3.00"}
     ],
     "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "assets/images/mb.jpg",
     "__v": 2,
     "category": "6531209dbbe4998e90af3fef",
     "time": "20 min"
   },
   {
     "_id": "653169a9f94c6496dc84f3c3",
-    "title": "Vegan Salad Bowl",
+    "title": "Beef Biriyani",
     "foodTags": ["Vegan", "Healthy", "Salad", "Fresh", "Organic"],
     "foodType": ["Starter", "Lunch", "Dinner", "Health", "Vegan"],
     "code": "41007428",
@@ -201,7 +177,7 @@ List<Map<String, dynamic>> foods = [
       {"id": 5, "title": "Vinaigrette", "price": "0.50"}
     ],
     "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "assets/images/bb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "55 min"
@@ -225,14 +201,14 @@ List<Map<String, dynamic>> foods = [
       {"id": 3, "title": "Ketch up", "price": "0.50"}
     ],
     "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "assets/images/cb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "30 min"
   },
   {
     "_id": "65316a01f94c6496dc84f3c7",
-    "title": "Tropical Fruit Smoothie",
+    "title": "Chicken Biriyani",
     "foodTags": ["Fruit", "Smoothie", "Refreshing", "Sweet", "Cold"],
     "foodType": ["Drink", "Breakfast", "Snack", "Dessert", "Vegan"],
     "code": "41007428",
@@ -251,14 +227,14 @@ List<Map<String, dynamic>> foods = [
       {"id": 5, "title": "Ice", "price": "0.50"}
     ],
     "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "assets/images/cb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "25 min"
   },
   {
     "_id": "653169d8f94c6496dc84f3c5",
-    "title": "Mixed Grill Platter",
+    "title": "Mutton Biriyani",
     "foodTags": ["Barbecue", "Meat", "Grilled", "Spicy", "Savory"],
     "foodType": [
       "Main Course",
@@ -283,7 +259,7 @@ List<Map<String, dynamic>> foods = [
       {"id": 5, "title": "Barbecue Sauce", "price": "1.00"}
     ],
     "imageUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "assets/images/mb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "45 min"
