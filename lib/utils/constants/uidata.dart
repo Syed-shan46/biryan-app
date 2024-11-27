@@ -45,7 +45,7 @@ List<dynamic> restaurants = [
     "owner": "fdfsdfsdfs",
     "code": "41007428",
     "logoUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "",
     "rating": 5,
     "ratingCount": "6765",
     "coords": {
@@ -66,7 +66,7 @@ List<dynamic> restaurants = [
     "owner": "sjgdsjgfjshhjs",
     "code": "41007428",
     "logoUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "",
     "rating": 5,
     "ratingCount": "3278",
     "coords": {
@@ -87,7 +87,7 @@ List<dynamic> restaurants = [
     "owner": "fgdgdfgd",
     "code": "41007428",
     "logoUrl":
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
+        "",
     "rating": 5,
     "ratingCount": "5666",
     "coords": {
@@ -277,8 +277,8 @@ const cart = [
       "rating": 4.5,
       "ratingCount": "150",
       "imageUrl": [
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp",
-        "https://d326fntlu7tb1e.cloudfront.net/uploads/5c2a9ca8-eb07-400b-b8a6-2acfab2a9ee2-image001.webp"
+        "",
+        ""
       ]
     },
     "additives": ["Extra Cheese", "Mushrooms"],
@@ -297,7 +297,7 @@ const profile = {
   "address": [],
   "userType": "Vendor",
   "profile":
-      "https://d326fntlu7tb1e.cloudfront.net/uploads/bdec9d7d-0544-4fc4-823d-3b898f6dbbbf-vinci_03.jpeg",
+      "",
   "updatedAt": "2023-10-24T11:02:28.215Z"
 };
 
