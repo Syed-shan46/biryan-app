@@ -1,3 +1,4 @@
+import 'package:biriyani/features/shop/screens/home/widgets/category_list.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/home_header.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
-        child: MyHeader(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MyHeader(),
+              CategoryList(),
+            ],
+          ),
+        ),
       ),
     );
   }
