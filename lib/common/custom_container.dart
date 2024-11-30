@@ -3,9 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class CustomContainer extends StatelessWidget {
-  CustomContainer({super.key, required this.containerContent});
+  CustomContainer({super.key, required this.containerContent,this.color});
 
   Widget containerContent;
+  Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class CustomContainer extends StatelessWidget {
         ),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          color: Colors.white,
+          color: color ?? Colors.white,
           child: SingleChildScrollView(
             child: containerContent,
           ),

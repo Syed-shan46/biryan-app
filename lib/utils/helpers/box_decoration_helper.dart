@@ -8,16 +8,16 @@ BoxDecoration getDynamicBoxDecoration(BuildContext context) {
 
   return BoxDecoration(
     color: isDarkMode
-        ? const Color.fromARGB(255, 33, 33, 33)
-        : DynamicBg.sameBrightness(context), // Base color for the box
+        ?  Colors.blueGrey.withOpacity(0.1)
+        : ThemeUtils.sameBrightness(context), // Base color for the box
     boxShadow: isDarkMode
         ? [] // No shadow in dark mode
         : [
-            BoxShadow(
-              color:
-                  Colors.black.withOpacity(0.1), // Shadow color for light mode
-              blurRadius: 50,
-              offset: const Offset(0, 10),
+            const BoxShadow(
+              color: Color.fromRGBO(99, 99, 99, 0.2),
+              offset: Offset(0, 2),
+              blurRadius: 8,
+              spreadRadius: 0,
             ),
           ],
 

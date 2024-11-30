@@ -15,13 +15,7 @@ class ThemeUtils {
   }
 }
 
-class DynamicBg {
-  static Color sameBrightness(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? AppColors.darkBackground
-        : Colors.white;
-  }
-}
+
 
 class Navbg {
   static Color navbarBg(BuildContext context) {

@@ -4,21 +4,21 @@ import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MyHeader extends StatefulWidget {
-  const MyHeader({
+class HomeHeader extends StatefulWidget {
+  const HomeHeader({
     super.key,
   });
 
   @override
-  State<MyHeader> createState() => _MyHeaderState();
+  State<HomeHeader> createState() => _HomeHeaderState();
 }
 
-class _MyHeaderState extends State<MyHeader> {
+class _HomeHeaderState extends State<HomeHeader> {
   @override
   Widget build(BuildContext context) {
     String userName = 'Deliver to';
     return Padding(
-      padding: const EdgeInsets.only(left: MySizes.spaceBtwItems),
+      padding: EdgeInsets.only(left: 12.w,top: 5.h,bottom: 2.h  ),
       child: Row(
         children: [
           CircleAvatar(
@@ -35,10 +35,9 @@ class _MyHeaderState extends State<MyHeader> {
                 children: [
                   Text(
                     userName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: AppColors.primaryColor,fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: AppColors.primaryColor,
+                        fontWeight: FontWeight.w600),
                   ),
                   Text(
                     'Parakunnam  678001',
@@ -53,8 +52,7 @@ class _MyHeaderState extends State<MyHeader> {
           ),
           // Cart icon on the right side
           Padding(
-            padding: const EdgeInsets.only(
-                right: MySizes.spaceBtwItems), // Consistent padding
+            padding: const EdgeInsets.only(right: 5), // Consistent padding
             child: Text(
               getTimeOfDay(),
               style: const TextStyle(fontSize: 25),

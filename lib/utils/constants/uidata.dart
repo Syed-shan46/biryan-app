@@ -34,6 +34,13 @@ List<dynamic> categories = [
     "imageUrl": "assets/images/coc.png",
     "__v": 0
   },
+  {
+    "_id": "6537ece708ff5b7de97d0695",
+    "title": "Shawarma",
+    "value": "shawarma",
+    "imageUrl": "assets/images/shawarma.png",
+    "__v": 0
+  },
 ];
 
 List<dynamic> restaurants = [
@@ -41,11 +48,10 @@ List<dynamic> restaurants = [
     "_id": "6530ebbcc9e72013e5b65933",
     "title": "Lapisara Eatery",
     "time": "6:00am - 9:00pm",
-    "imageUrl":"assets/images/cb.jpg",
+    "imageUrl": "assets/images/cb.jpg",
     "owner": "fdfsdfsdfs",
     "code": "41007428",
-    "logoUrl":
-        "",
+    "logoUrl": "",
     "rating": 5,
     "ratingCount": "6765",
     "coords": {
@@ -62,11 +68,10 @@ List<dynamic> restaurants = [
     "_id": "6530ea6bc9e72013e5b6592d",
     "title": "Burger King",
     "time": "6:00am - 9:00pm",
-    "imageUrl":"assets/images/mb.jpg",
+    "imageUrl": "assets/images/mb.jpg",
     "owner": "sjgdsjgfjshhjs",
     "code": "41007428",
-    "logoUrl":
-        "",
+    "logoUrl": "",
     "rating": 5,
     "ratingCount": "3278",
     "coords": {
@@ -83,11 +88,10 @@ List<dynamic> restaurants = [
     "_id": "6530eb66c9e72013e5b65931",
     "title": "La Foods",
     "time": "6:00am - 9:00pm",
-    "imageUrl":"assets/images/bb.jpg",
+    "imageUrl": "assets/images/bb.jpg",
     "owner": "fgdgdfgd",
     "code": "41007428",
-    "logoUrl":
-        "",
+    "logoUrl": "",
     "rating": 5,
     "ratingCount": "5666",
     "coords": {
@@ -100,7 +104,6 @@ List<dynamic> restaurants = [
       "longitudeDelta": 0.0221
     }
   },
-  
 ];
 
 List<Map<String, dynamic>> foods = [
@@ -124,8 +127,7 @@ List<Map<String, dynamic>> foods = [
       {"id": 4, "title": "Cocoa", "price": "0.50"},
       {"id": 5, "title": "Sugar", "price": "0.50"}
     ],
-    "imageUrl":
-        "assets/images/cb.jpg",
+    "imageUrl": "assets/images/cb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "35 min"
@@ -150,8 +152,7 @@ List<Map<String, dynamic>> foods = [
       {"id": 4, "title": "Black Pepper", "price": "0.50"},
       {"id": 5, "title": "Pasta", "price": "3.00"}
     ],
-    "imageUrl":
-        "assets/images/mb.jpg",
+    "imageUrl": "assets/images/mb.jpg",
     "__v": 2,
     "category": "6531209dbbe4998e90af3fef",
     "time": "20 min"
@@ -176,8 +177,7 @@ List<Map<String, dynamic>> foods = [
       {"id": 4, "title": "Cherry Tomatoes", "price": "1.00"},
       {"id": 5, "title": "Vinaigrette", "price": "0.50"}
     ],
-    "imageUrl":
-        "assets/images/bb.jpg",
+    "imageUrl": "assets/images/bb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "55 min"
@@ -200,8 +200,7 @@ List<Map<String, dynamic>> foods = [
       {"id": 2, "title": "Pepperoni", "price": "2.50"},
       {"id": 3, "title": "Ketch up", "price": "0.50"}
     ],
-    "imageUrl":
-        "assets/images/cb.jpg",
+    "imageUrl": "assets/images/cb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "30 min"
@@ -226,8 +225,7 @@ List<Map<String, dynamic>> foods = [
       {"id": 4, "title": "Coconut Milk", "price": "1.50"},
       {"id": 5, "title": "Ice", "price": "0.50"}
     ],
-    "imageUrl":
-        "assets/images/cb.jpg",
+    "imageUrl": "assets/images/cb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "25 min"
@@ -258,8 +256,7 @@ List<Map<String, dynamic>> foods = [
       {"id": 4, "title": "Pork", "price": "3.50"},
       {"id": 5, "title": "Barbecue Sauce", "price": "1.00"}
     ],
-    "imageUrl":
-        "assets/images/mb.jpg",
+    "imageUrl": "assets/images/mb.jpg",
     "__v": 0,
     "category": "6531209dbbe4998e90af3fef",
     "time": "45 min"
@@ -276,10 +273,7 @@ const cart = [
       "restaurant": "6530ebbcc9e72013e5b65933",
       "rating": 4.5,
       "ratingCount": "150",
-      "imageUrl": [
-        "",
-        ""
-      ]
+      "imageUrl": ["", ""]
     },
     "additives": ["Extra Cheese", "Mushrooms"],
     "instructions": "",
@@ -296,8 +290,7 @@ const profile = {
   "uid": "4NmOkCbvu7ToaBS9ZR1UVpv0G1g2",
   "address": [],
   "userType": "Vendor",
-  "profile":
-      "",
+  "profile": "",
   "updatedAt": "2023-10-24T11:02:28.215Z"
 };
 

@@ -8,19 +8,23 @@ class FoodList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 170.h,
-      padding: EdgeInsets.only(left: 12.w),
-      child: ListView(
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 11.w),
         scrollDirection: Axis.horizontal,
-        children: List.generate(foods.length, (i) {
+        itemCount: foods.length,
+        clipBehavior: Clip.none,
+        itemBuilder: (context, i) {
           var food = foods[i];
           return FoodWidget(
-              image: food['imageUrl'].toString(),
-              title: food['title'],
-              price: food['price'].toStringAsFixed(2),
-              time: food['time'],);
-        }),
+            image: food['imageUrl'].toString(),
+            title: food['title'],
+            price: food['price'].toStringAsFixed(2),
+            time: food['time'],
+          );
+        },
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:biriyani/features/shop/screens/search/search_screen.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax/iconsax.dart';
@@ -17,40 +18,56 @@ class NavigationMenu extends StatefulWidget {
 }
 
 class _NavigationMenuState extends State<NavigationMenu> {
-  final  controller = Get.put(NavigationController());
+  final NavigationController controller = Get.put(NavigationController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: Obx(()=>
-         NavigationBar(
-          backgroundColor: AppColors.primaryColor.withOpacity(0.9),
-          indicatorColor: Colors.black.withOpacity(0.7),
+    return Obx(() {
+      return Scaffold(
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 12.h),
+            child: GNav(
+              activeColor: AppColors.primaryColor.withOpacity(0.8),
+              tabActiveBorder: Border.all(color: AppColors.primaryColor),
+              padding:  EdgeInsets.all(6.h),
+              selectedIndex: controller.selectedIndex.value,
+              onTabChange: controller.changeTabIndex, // Use the method
+              gap: 8,
 
-            selectedIndex: controller.selectedIndex.value,
-            onDestinationSelected: (index)=> controller.selectedIndex.value = index,
-            destinations: const [
-              
-              NavigationDestination(icon: Icon(Iconsax.home), label: 'Home',),
-              NavigationDestination(
-                  icon: Icon(Iconsax.search_favorite), label: 'Search'),
-              NavigationDestination(
-                  icon: Icon(Iconsax.shopping_cart), label: 'Cart'),
-              NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
-            ],),
-            
-      ),
-      body: Obx(() => controller.screens[controller.selectedIndex.value]),
-    );
+              tabs: const [
+                GButton(
+                  icon: Iconsax.home5,
+                  text: 'Home',
+                ),
+                GButton(icon: Iconsax.search_favorite, text: 'Search'),
+                GButton(icon: Iconsax.shopping_cart, text: 'Cart'),
+                GButton(
+                  icon: CupertinoIcons.person,
+                  text: 'Profile',
+                )
+              ],
+            ),
+          ),
+        ),
+        body: controller.screens[controller.selectedIndex.value],
+      );
+    });
   }
 }
 
 class NavigationController extends GetxController {
-  final Rx<int> selectedIndex = 0.obs;
-  final screens = const [ 
-     HomeScreen(),
-     SearchScreen(),
-     CartScreen(),
-     ProfileScreen(),
+  var selectedIndex = 0.obs;
+
+  final screens = [
+    const HomeScreen(),
+    const SearchScreen(),
+    const CartScreen(),
+    const ProfileScreen(),
   ];
+
+  void changeTabIndex(int index) {
+    selectedIndex.value = index;
+  }
 }
