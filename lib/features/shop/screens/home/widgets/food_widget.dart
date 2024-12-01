@@ -1,6 +1,5 @@
 import 'package:biriyani/common/app_style.dart';
 import 'package:biriyani/common/reusable_text.dart';
-import 'package:biriyani/features/shop/screens/home/product_detail/product_detail_screen.dart';
 import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/helpers/box_decoration_helper.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
@@ -30,7 +29,7 @@ class FoodWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const ProductDetailScreen());
+        Get.toNamed('product_details');
       },
       child: Padding(
         padding: EdgeInsets.only(right: 12.w),

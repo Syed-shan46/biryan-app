@@ -6,6 +6,7 @@ import 'package:biriyani/features/shop/screens/profile/widgets/user_profile_tile
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -35,7 +36,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           backgroundColor:
                               AppColors.lightBackground.withOpacity(0.6));
                     },
-                  ),
+                  ).animate().slideY(
+                        begin: 5, // Start below the screen
+                        end: 0, // End at normal position
+                        curve: Curves.easeInOut,
+                        delay: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 1400),
+                      ),
                   const SizedBox(
                     height: MySizes.spaceBtwItems,
                   )
@@ -53,41 +60,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Iconsax.shopping_cart,
                       title: 'My Address',
                       subTitle: 'Shopping delivery address'),
-                ),
+                ).animate().slideX(
+                      begin: -1, // Start below the screen
+                      end: 0, // End at normal position
+                      curve: Curves.easeInOut,
+                      delay: const Duration(milliseconds: 100),
+                      duration: const Duration(milliseconds: 200),
+                    ),
                 InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () => Get.to(() => const CartScreen()),
                   child: const MySettingsMenuTile(
-                      icon: Iconsax.shopping_bag,
-                      title: 'My Cart',
-                      subTitle: 'Add, Remove products and move to checkout'),
+                          icon: Iconsax.shopping_bag,
+                          title: 'My Cart',
+                          subTitle: 'Add, Remove products and move to checkout')
+                      .animate()
+                      .slideX(
+                        begin: -1, // Start below the screen
+                        end: 0, // End at normal position
+                        curve: Curves.easeInOut,
+                        delay: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 400),
+                      ),
                 ),
                 InkWell(
                   onTap: () {},
                   child: const MySettingsMenuTile(
-                      icon: Iconsax.bag_tick,
-                      title: 'My Orders',
-                      subTitle: 'In-progress and Completed Orders'),
+                          icon: Iconsax.bag_tick,
+                          title: 'My Orders',
+                          subTitle: 'In-progress and Completed Orders')
+                      .animate()
+                      .slideX(
+                        begin: -1, // Start below the screen
+                        end: 0, // End at normal position
+                        curve: Curves.easeInOut,
+                        delay: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 600),
+                      ),
                 ),
                 const MySettingsMenuTile(
-                    icon: Iconsax.bank,
-                    title: 'Bank Account',
-                    subTitle: 'Withdraw balance to registered bank account'),
+                        icon: Iconsax.bank,
+                        title: 'Bank Account',
+                        subTitle: 'Withdraw balance to registered bank account')
+                    .animate()
+                    .slideX(
+                      begin: -1, // Start below the screen
+                      end: 0, // End at normal position
+                      curve: Curves.easeInOut,
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 800),
+                    ),
                 const MySettingsMenuTile(
-                    icon: Iconsax.discount_shape,
-                    title: 'My Coupons',
-                    subTitle: 'List of all discounted Coupons'),
+                        icon: Iconsax.discount_shape,
+                        title: 'My Coupons',
+                        subTitle: 'List of all discounted Coupons')
+                    .animate()
+                    .slideX(
+                      begin: -1, // Start below the screen
+                      end: 0, // End at normal position
+                      curve: Curves.easeInOut,
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 1000),
+                    ),
                 const MySettingsMenuTile(
-                    icon: Iconsax.notification,
-                    title: 'Notifications',
-                    subTitle: 'Set any kind of notification message'),
+                        icon: Iconsax.notification,
+                        title: 'Notifications',
+                        subTitle: 'Set any kind of notification message')
+                    .animate()
+                    .slideX(
+                      begin: -1, // Start below the screen
+                      end: 0, // End at normal position
+                      curve: Curves.easeInOut,
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 1200),
+                    ),
                 const MySettingsMenuTile(
                   icon: Iconsax.security_card,
                   title: 'Account Privacy',
                   subTitle: 'Manage data usage and connected accounts',
-                ),
+                ).animate().slideX(
+                      begin: -1, // Start below the screen
+                      end: 0, // End at normal position
+                      curve: Curves.easeInOut,
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 1400),
+                    ),
 
                 const SizedBox(height: MySizes.spaceBtwItems),
                 SizedBox(
@@ -169,7 +228,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: TextStyle(
                           color: Colors.white.withOpacity(0.8), fontSize: 16),
                     ),
-                  ),
+                  ).animate().slideY(
+                        begin: 5, // Start below the screen
+                        end: 0, // End at normal position
+                        curve: Curves.easeInOut,
+                        delay: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 1600),
+                      ),
                 ),
               ],
             ),

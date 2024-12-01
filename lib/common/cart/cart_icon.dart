@@ -35,7 +35,7 @@ class _MyCartIconState extends State<MyCartIcon> {
       badgeContent:
           const Text('2', style: TextStyle(fontSize: 12, color: Colors.white)),
       child: InkWell(
-        onTap: () => Get.to(() => const CartScreen()),
+        onTap: (){},
         child: Icon(
           Iconsax.shopping_bag,
           color: widget.color,

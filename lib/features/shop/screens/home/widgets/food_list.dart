@@ -3,9 +3,14 @@ import 'package:biriyani/utils/constants/uidata.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class FoodList extends StatelessWidget {
+class FoodList extends StatefulWidget {
   const FoodList({super.key});
 
+  @override
+  State<FoodList> createState() => _FoodListState();
+}
+
+class _FoodListState extends State<FoodList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

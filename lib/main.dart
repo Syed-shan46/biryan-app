@@ -1,3 +1,4 @@
+import 'package:biriyani/features/shop/screens/home/product_detail/product_detail_screen.dart';
 import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/features/authentication/onboarding/onboarding_screen.dart';
 import 'package:biriyani/utils/animation/page_transition.dart';
@@ -27,12 +28,23 @@ class MyApp extends StatelessWidget {
         darkTheme: darkTheme,
         home: const OnboardingScreen(),
         onGenerateRoute: (settings) {
-          return switch (settings.name) {
-            'home' => NoAnimationTransition(
-                builder: (context) =>  const NavigationMenu()),
-            _ => NoAnimationTransition(
-                builder: (context) =>  const NavigationMenu())
-          };
+          // Route handling
+          switch (settings.name) {
+            case 'home':
+              return NoAnimationTransition(
+                builder: (context) => const NavigationMenu(),
+              );
+            case 'product_details':
+              // Retrieve arguments if passed (like product data)
+
+              return NoAnimationTransition(
+                builder: (context) => const ProductDetailScreen(),
+              );
+            default:
+              return NoAnimationTransition(
+                builder: (context) => const NavigationMenu(),
+              );
+          }
         },
       ),
     );

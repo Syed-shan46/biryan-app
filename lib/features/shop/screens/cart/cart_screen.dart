@@ -8,6 +8,7 @@ import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -19,19 +20,47 @@ class CartScreen extends StatefulWidget {
   _CartScreenState createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _CartScreenState extends State<CartScreen>
+    with SingleTickerProviderStateMixin {
   //Checking if already address is on Db
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    _controller = AnimationController(vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       /// Appbar
       appBar: AppBar(
-        title: const Text('Cart'),
-        actions: const [
+        automaticallyImplyLeading: false,
+        title: const Text('Cart').animate().slideY(
+              begin: 10, // Start below the screen
+              end: 0, // End at normal position
+              curve: Curves.easeInOut,
+              delay: const Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 1000),
+            ),
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 15),
-            child: MyCartIcon(),
+            padding: const EdgeInsets.only(right: 15),
+            child: const MyCartIcon().animate().slideY(
+                  begin: 10, // Start below the screen
+                  end: 0, // End at normal position
+                  curve: Curves.easeInOut,
+                  // ignore: prefer_const_constructors
+                  delay: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 1000),
+                ),
           )
         ],
       ),
@@ -57,7 +86,13 @@ class _CartScreenState extends State<CartScreen> {
                   .bodyLarge!
                   .copyWith(color: ThemeUtils.sameBrightness(context)),
             ),
-          ),
+          ).animate().slideY(
+                begin: 10, // Start below the screen
+                end: 0, // End at normal position
+                curve: Curves.easeInOut,
+                delay: const Duration(milliseconds: 1000),
+                duration: const Duration(milliseconds: 1000),
+              ),
         ),
       ),
 
@@ -70,7 +105,13 @@ class _CartScreenState extends State<CartScreen> {
             const Padding(
               padding: EdgeInsets.only(left: 30, top: 10),
               child: Text('check and pay items'),
-            ),
+            ).animate().slideY(
+                  begin: 4, // Start below the screen
+                  end: 0, // End at normal position
+                  curve: Curves.easeInOut,
+                  delay: const Duration(milliseconds: 800),
+                  duration: const Duration(milliseconds: 800),
+                ),
 
             /// Cart items card
             const Padding(
@@ -79,10 +120,26 @@ class _CartScreenState extends State<CartScreen> {
                 showQuantity: false,
                 showButtons: true,
               ),
-            ),
+            ).animate().slideY(
+                  begin: 1, // Start below the screen
+                  end: 0, // End at normal position
+                  curve: Curves.easeInOut,
+                  delay: Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 800),
+                ),
 
             Divider(
-                color: Colors.grey.withOpacity(0.3), indent: 20, endIndent: 20),
+                    color: Colors.grey.withOpacity(0.3),
+                    indent: 20,
+                    endIndent: 20)
+                .animate()
+                .slideX(
+                  begin: -5, // Start below the screen
+                  end: 0, // End at normal position
+                  curve: Curves.easeInOut,
+                  delay: Duration(milliseconds: 1500),
+                  duration: const Duration(milliseconds: 1300),
+                ),
             const SizedBox(height: MySizes.spaceBtwItems),
 
             /// Coupon box
@@ -108,7 +165,13 @@ class _CartScreenState extends State<CartScreen> {
 
                   Divider(
                     color: Colors.grey.withOpacity(0.3),
-                  ),
+                  ).animate().slideX(
+                        begin: -5, // Start below the screen
+                        end: 0, // End at normal position
+                        curve: Curves.easeInOut,
+                        delay: Duration(milliseconds: 1500),
+                        duration: const Duration(milliseconds: 1300),
+                      ),
                   const SizedBox(height: MySizes.spaceBtwItems / 2),
 
                   Row(
@@ -155,7 +218,13 @@ class _CartScreenState extends State<CartScreen> {
 
                   Divider(
                     color: Colors.grey.withOpacity(0.3),
-                  ),
+                  ).animate().slideX(
+                        begin: -5, // Start below the screen
+                        end: 0, // End at normal position
+                        curve: Curves.easeInOut,
+                        delay: Duration(milliseconds: 1500),
+                        duration: const Duration(milliseconds: 1300),
+                      ),
 
                   /// Total Price
                   Row(
@@ -176,10 +245,25 @@ class _CartScreenState extends State<CartScreen> {
                     ],
                   ),
                 ],
-              ),
+              ).animate().slideY(
+                    begin: 1, // Start below the screen
+                    end: 0, // End at normal position
+                    curve: Curves.easeInOut,
+                    duration: const Duration(milliseconds: 800),
+                  ),
             )
           ],
-        ),
+        )
+            .animate(
+              autoPlay: false,
+              controller: _controller,
+            )
+            .blurXY(
+                begin: 0, end: 25, duration: 600.ms, curve: Curves.easeInOut)
+            .scaleXY(begin: 1, end: 0.6)
+            .fadeOut(
+              begin: 1,
+            ),
       ),
     );
   }
@@ -243,8 +327,6 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 }
-
-
 
 class PurchaseBtn extends StatelessWidget {
   const PurchaseBtn({

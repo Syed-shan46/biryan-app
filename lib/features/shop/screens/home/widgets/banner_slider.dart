@@ -47,7 +47,7 @@ class _MyBannerSliderState extends State<MyBannerSlider> {
           ],
         ),
         Positioned(
-          bottom: 20.h,
+          bottom: 23,
           child: MyDotNavigation(
             controller: controller,
             dotCount: 3,

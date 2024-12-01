@@ -1,4 +1,3 @@
-import 'package:biriyani/common/custom_shapes/primary_header_container.dart';
 import 'package:biriyani/common/text_forms/my_text_form_widget.dart';
 import 'package:biriyani/features/authentication/screens/register/register.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
@@ -112,7 +111,7 @@ class CreateAccount extends StatelessWidget {
           ),
         ),
         onPressed: () => Get.to(() => const SignUpScreen()),
-        child:  Text(
+        child: Text(
           'Create Account',
           style: TextStyle(
             color: ThemeUtils.dynamicTextColor(context),
@@ -145,7 +144,6 @@ class _RememberMePasswordState extends State<RememberMePassword> {
         Row(
           children: [
             Checkbox(
-              
               value: _rememberMe,
               side: BorderSide(color: ThemeUtils.dynamicTextColor(context)),
               onChanged: (value) {

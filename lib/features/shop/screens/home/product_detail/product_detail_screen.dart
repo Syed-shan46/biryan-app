@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import, unnecessary_import
 
+import 'dart:async';
+
 import 'package:biriyani/common/app_style.dart';
 import 'package:biriyani/common/appbar/custom_appbar.dart';
 import 'package:biriyani/common/custom_shapes/curved_edges_widget.dart';
@@ -16,6 +18,7 @@ import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -35,16 +38,39 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final PageController pageController = PageController();
   int currentPage = 0;
+  bool _showBottomNav = false;
+
+  @override
+  void initState() {
+    super.initState();
+    print("Timer started for 7 seconds...");
+    // Add a delay before showing the BottomNavigationBar
+    Timer(const Duration(seconds: 1), () {
+      setState(() {
+        _showBottomNav = true;
+      });
+      print("BottomNavigationBar is now visible");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final playDuration = 600.ms;
+
     return Scaffold(
       // Bottom Navigation Bar
-      bottomNavigationBar: const BottomNavigationBtn(),
+      bottomNavigationBar: _showBottomNav
+          ? const BottomNavigationBtn().animate().slideY(
+                begin: 1, // Start below the screen
+                end: 0, // End at normal position
+                curve: Curves.easeInOut,
+                duration: const Duration(milliseconds: 800),
+              )
+          : null,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const ProductDetailImages(),
+            ProductDetailImages(playDuration: playDuration),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(),
@@ -52,10 +78,43 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Icon Row
-                  iconRow(),
+                  IconRow(
+                    playDuration: playDuration,
+                  ),
                   const SizedBox(height: MySizes.spaceBtwItems),
                   // Product name and description
-                  productDetail(context),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Mutton Biriyani',
+                              style: appStyle(
+                                  24,
+                                  ThemeUtils.dynamicTextColor(context),
+                                  FontWeight.w600),
+                            ),
+                            const Icon(Icons.share),
+                          ],
+                        ),
+
+                        // Description
+                        Text(
+                          'Crafted with tender mutton, perfectly spiced rice, and a medley of aromatic herbs, every bite offers a journey through layers of taste and culture. Our Mutton Biriyani is slow-cooked to perfection',
+                          style: appStyle(12, Colors.grey, FontWeight.normal),
+                        ),
+                      ],
+                    )
+                        .animate()
+                        .fadeIn(
+                            duration: 300.ms,
+                            delay: playDuration,
+                            curve: Curves.decelerate)
+                        .slideX(begin: 0.2, end: 0),
+                  ),
                   const SizedBox(height: MySizes.spaceBtwSections),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -64,9 +123,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       style: appStyle(17, ThemeUtils.dynamicTextColor(context),
                           FontWeight.w500),
                     ),
-                  ),
+                  ).animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 300.ms,
+                      duration: playDuration - 100.ms,
+                      curve: Curves.decelerate),
 
-                  const FoodList()
+                  const FoodList().animate().scaleXY(
+                      begin: 0,
+                      end: 1,
+                      delay: 300.ms,
+                      duration: playDuration - 100.ms,
+                      curve: Curves.decelerate)
                 ],
               ),
             )
@@ -75,35 +144,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
     );
   }
+}
 
-  Padding productDetail(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Mutton Biriyani',
-                style: appStyle(
-                    24, ThemeUtils.dynamicTextColor(context), FontWeight.w600),
-              ),
-              const Icon(Icons.share),
-            ],
-          ),
+class IconRow extends StatelessWidget {
+  final Duration playDuration;
+  const IconRow({
+    super.key,
+    required this.playDuration,
+  });
 
-          // Description
-          Text(
-            'Crafted with tender mutton, perfectly spiced rice, and a medley of aromatic herbs, every bite offers a journey through layers of taste and culture. Our Mutton Biriyani is slow-cooked to perfection',
-            style: appStyle(12, Colors.grey, FontWeight.normal),
-          ),
-        ],
-      ),
-    );
-  }
-
-  SizedBox iconRow() {
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 60.h,
       child: Row(
@@ -169,7 +220,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ],
           ),
         ],
-      ),
+      ).animate().scaleXY(
+          begin: 0,
+          end: 1,
+          delay: 300.ms,
+          duration: playDuration - 100.ms,
+          curve: Curves.decelerate),
     );
   }
 }
@@ -211,17 +267,27 @@ class _BottomNavigationBtnState extends State<BottomNavigationBtn> {
               ),
             ),
           ),
-
           Expanded(
-            child: Row(children: [ 
-              const Icon(Icons.remove_circle_outline_outlined,size: 28,color: AppColors.primaryColor,),
-              SizedBox(width: 6.w),
-              Text('2',style: appStyle(17, ThemeUtils.dynamicTextColor(context), FontWeight.w400),),
-              SizedBox(width: 6.w),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.remove_circle_outline_outlined,
+                  size: 28,
+                  color: AppColors.primaryColor,
+                ),
+                SizedBox(width: 6.w),
+                Text(
+                  '2',
+                  style: appStyle(17, ThemeUtils.dynamicTextColor(context),
+                      FontWeight.w400),
+                ),
+                SizedBox(width: 6.w),
 
-              // ignore: prefer_const_constructors
-              Icon(Icons.add_circle_outline_outlined,size: 28,color: AppColors.primaryColor),
-            ],),
+                // ignore: prefer_const_constructors
+                Icon(Icons.add_circle_outline_outlined,
+                    size: 28, color: AppColors.primaryColor),
+              ],
+            ),
           ),
           SizedBox(
             width: 135.w,
@@ -273,8 +339,10 @@ class CheckoutButton extends StatelessWidget {
 }
 
 class ProductDetailImages extends StatefulWidget {
+  final Duration playDuration;
   const ProductDetailImages({
     super.key,
+    required this.playDuration,
   });
 
   @override
@@ -293,7 +361,7 @@ class _ProductDetailImagesState extends State<ProductDetailImages> {
             CarouselSlider(
               items: [
                 Image.asset(
-                  'assets/images/mb.jpg',
+                  'assets/images/dish.png',
                   fit: BoxFit.cover,
                 ),
               ],
@@ -304,7 +372,10 @@ class _ProductDetailImagesState extends State<ProductDetailImages> {
                 viewportFraction: 1,
                 aspectRatio: 16 / 9,
               ),
-            ),
+            )
+                .animate(delay: 400.ms)
+                .shimmer(duration: widget.playDuration - 200.ms)
+                .flip(),
 
             // Positioning the AppBar above the CarouselSlider
             Positioned(
