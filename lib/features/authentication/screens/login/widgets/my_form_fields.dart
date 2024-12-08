@@ -1,8 +1,10 @@
 import 'package:biriyani/common/text_forms/my_text_form_widget.dart';
 import 'package:biriyani/features/authentication/screens/register/register.dart';
+import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -18,19 +20,40 @@ class MyFormFields extends StatefulWidget {
 }
 
 class _MyFormFieldsState extends State<MyFormFields> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passWordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passWordController.dispose();
+  }
+
+  // Login method
+  Future<void> loginUserWithEmailAndPassword() async {
+    try {
+       await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passWordController.text.trim());
+      Get.to(() => const NavigationMenu());
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
+  }
 
   /// Login method
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
       child: Column(
         children: [
           // Email TextField
           MyTextField(
-
+              controller: emailController,
               // Validating
               validator: (value) {
                 if (value!.isEmpty) {
@@ -47,6 +70,7 @@ class _MyFormFieldsState extends State<MyFormFields> {
 
           // Password TextField
           MyTextField(
+              controller: passWordController,
               labelText: 'Password',
               validator: (value) {
                 if (value!.isEmpty) {
@@ -71,7 +95,9 @@ class _MyFormFieldsState extends State<MyFormFields> {
                   borderRadius: BorderRadius.all(Radius.circular(25)),
                 ),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                await loginUserWithEmailAndPassword();
+              },
               child: Text(
                 'Login',
                 style: TextStyle(

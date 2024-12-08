@@ -1,15 +1,41 @@
 import 'package:biriyani/common/app_style.dart';
-import 'package:biriyani/utils/constants/uidata.dart';
+import 'package:biriyani/features/shop/controllers/category_controller.dart';
+import 'package:biriyani/provider/category_provider.dart';
+import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CategoryList extends StatelessWidget {
+class CategoryList extends ConsumerStatefulWidget {
   const CategoryList({super.key});
+
+  @override
+  ConsumerState<CategoryList> createState() => _CategoryListState();
+}
+
+class _CategoryListState extends ConsumerState<CategoryList> {
+  Future<void> _fetchCategories() async {
+    final CategoryController categoryController = CategoryController();
+    try {
+      final categories = await categoryController.loadCategories();
+      ref.read(categoryProvider.notifier).setCategories(categories);
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCategories();
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final categories = ref.watch(categoryProvider);
     return Container(
       height: 80.h, // Increased height for better alignment
       padding:
@@ -47,18 +73,20 @@ class CategoryList extends StatelessWidget {
                   child: Center(
                     child: SizedBox(
                       height: 30.h,
-                      child: Image.asset(
-                        category['imageUrl'],
+                      child: Image.network(
+                        category.image,
                         fit: BoxFit.contain,
                       ),
                     ),
                   ),
-                ),
+                ).animate(delay: 400.ms).shimmer(
+                    duration: 1000.ms,
+                    color: AppColors.primaryColor.withOpacity(0.2)),
                 const SizedBox(height: 6),
                 SizedBox(
                   width: 50.w, // Match the circle width
                   child: Text(
-                    category['title'],
+                    category.name,
                     textAlign: TextAlign.center, // Center-align text
                     style: appStyle(11, ThemeUtils.dynamicTextColor(context),
                         FontWeight.normal),

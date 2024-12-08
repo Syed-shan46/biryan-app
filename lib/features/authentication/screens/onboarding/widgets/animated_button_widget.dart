@@ -50,10 +50,10 @@ class AnimatedTextWidget extends StatelessWidget {
   final Duration buttonPlayDuration;
   final Duration buttonDelayDuration;
   const AnimatedTextWidget({
-    Key? key,
+    super.key,
     required this.buttonPlayDuration,
     required this.buttonDelayDuration,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -30,19 +30,7 @@ final ThemeData lightTheme = ThemeData(
       buttonColor: AppColors.primaryColor,
       textTheme: ButtonTextTheme.primary,
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: Colors.grey[200],
-      hintStyle: TextStyle(color: Colors.grey[800]),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        borderSide: const BorderSide(color: AppColors.primaryColor, width: 2.0),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        borderSide: BorderSide(color: Colors.grey[400]!),
-      ),
-    ),
+    
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.green,
       selectedItemColor: AppColors.primaryColor, // Selected item color

@@ -1,10 +1,12 @@
 import 'package:biriyani/common/app_style.dart';
 import 'package:biriyani/common/reusable_text.dart';
+import 'package:biriyani/features/authentication/models/product.dart';
 import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/helpers/box_decoration_helper.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -16,6 +18,7 @@ class FoodWidget extends StatelessWidget {
     required this.title,
     required this.time,
     required this.price,
+    required this.product,
     this.onTap,
   });
 
@@ -23,6 +26,7 @@ class FoodWidget extends StatelessWidget {
   final String title;
   final String time;
   final String price;
+   final Product product;
   final void Function()? onTap;
 
   @override
@@ -54,7 +58,9 @@ class FoodWidget extends StatelessWidget {
                       child: Image.asset(
                         image,
                         fit: BoxFit.cover,
-                      ),
+                      ).animate(delay: 400.ms).shimmer(
+                            duration: 1000.ms,
+                          ),
                     ),
                   ),
                   Positioned(
@@ -64,7 +70,8 @@ class FoodWidget extends StatelessWidget {
                       width: 37.w,
                       height: 37.w,
                       decoration: BoxDecoration(
-                        color: ThemeUtils.sameBrightness(context).withOpacity(0.5),
+                        color:
+                            ThemeUtils.sameBrightness(context).withOpacity(0.5),
                         shape: BoxShape.circle,
                       ),
                       child: AnimatedSwitcher(
@@ -100,14 +107,14 @@ class FoodWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ReusableText(
-                          text: title,
+                          text: product.itemName,
                           style: appStyle(
                               12,
                               ThemeUtils.dynamicTextColor(context),
                               FontWeight.w500),
                         ),
                         ReusableText(
-                          text: "\$$price",
+                          text: product.itemPrice.toString(),
                           style: appStyle(
                               12, AppColors.primaryColor, FontWeight.w600),
                         ),

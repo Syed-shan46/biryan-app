@@ -3,6 +3,7 @@ import 'package:biriyani/features/shop/screens/home/widgets/banner_widget.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/my_dot_navigation.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -44,14 +45,9 @@ class _MyBannerSliderState extends State<MyBannerSlider> {
             MyBannerWidget(
               imageUrl: 'assets/banners/bn-3.jpg',
             ),
-          ],
-        ),
-        Positioned(
-          bottom: 23,
-          child: MyDotNavigation(
-            controller: controller,
-            dotCount: 3,
-          ),
+          ].animate(delay: 400.ms).shimmer(
+                duration: 1000.ms,
+              ),
         ),
       ],
     );

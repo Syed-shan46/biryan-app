@@ -1,7 +1,5 @@
-import 'package:biriyani/features/shop/screens/cart/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class MyCartIcon extends StatefulWidget {

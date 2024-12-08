@@ -1,6 +1,8 @@
+import 'package:biriyani/features/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:biriyani/features/shop/controllers/home_controller.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 
 class MyDotNavigation extends StatelessWidget {
@@ -21,15 +23,24 @@ class MyDotNavigation extends StatelessWidget {
             children: [
               for (int i = 0; i < dotCount; i++)
                 Container(
-                  height: 7,
-                  width: 7,
+                  height: 5,
+                  width: 15,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
                     color: controller.carousalCurrentIndex.value == i
                         ? AppColors.primaryColor
                         : Colors.grey,
+                    borderRadius: i == 0
+                        ? const BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            bottomLeft: Radius.circular(5),
+                          )
+                        : i == dotCount - 1
+                            ? const BorderRadius.only(
+                                topRight: Radius.circular(5),
+                                bottomRight: Radius.circular(5),
+                              )
+                            : BorderRadius.zero,
                   ),
-                  margin: const EdgeInsets.only(right: 10),
                 )
             ],
           ),

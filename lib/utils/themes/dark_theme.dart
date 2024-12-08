@@ -30,18 +30,6 @@ final ThemeData darkTheme = ThemeData(
       buttonColor: AppColors.primaryColor,
       textTheme: ButtonTextTheme.primary,
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: const Color.fromARGB(255, 44, 43, 43),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        borderSide: const BorderSide(color: AppColors.accentColor, width: 2.0),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        borderSide: BorderSide(color: Colors.grey[600]!),
-      ),
-    ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.darkBackground,
       // Use primary color for dark theme

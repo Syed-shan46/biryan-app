@@ -47,8 +47,8 @@ class _CartScreenState extends State<CartScreen>
               begin: 10, // Start below the screen
               end: 0, // End at normal position
               curve: Curves.easeInOut,
-              delay: const Duration(milliseconds: 500),
-              duration: const Duration(milliseconds: 1000),
+              delay: const Duration(milliseconds: 400),
+              duration: const Duration(milliseconds: 500),
             ),
         actions: [
           Padding(
@@ -58,8 +58,8 @@ class _CartScreenState extends State<CartScreen>
                   end: 0, // End at normal position
                   curve: Curves.easeInOut,
                   // ignore: prefer_const_constructors
-                  delay: Duration(milliseconds: 500),
-                  duration: const Duration(milliseconds: 1000),
+                  delay: Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 500),
                 ),
           )
         ],
@@ -90,8 +90,8 @@ class _CartScreenState extends State<CartScreen>
                 begin: 10, // Start below the screen
                 end: 0, // End at normal position
                 curve: Curves.easeInOut,
-                delay: const Duration(milliseconds: 1000),
-                duration: const Duration(milliseconds: 1000),
+                delay: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 500),
               ),
         ),
       ),
@@ -106,14 +106,14 @@ class _CartScreenState extends State<CartScreen>
               padding: EdgeInsets.only(left: 30, top: 10),
               child: Text('check and pay items'),
             ).animate().slideY(
-                  begin: 4, // Start below the screen
+                  begin: 1, // Start below the screen
                   end: 0, // End at normal position
                   curve: Curves.easeInOut,
-                  delay: const Duration(milliseconds: 800),
-                  duration: const Duration(milliseconds: 800),
+                  delay: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 500),
                 ),
 
-            /// Cart items card
+            // Cart items card
             const Padding(
               padding: EdgeInsets.all(MySizes.spaceBtwItems),
               child: CartItemCard(
@@ -121,11 +121,11 @@ class _CartScreenState extends State<CartScreen>
                 showButtons: true,
               ),
             ).animate().slideY(
-                  begin: 1, // Start below the screen
+                  begin: 0.3, // Start below the screen
                   end: 0, // End at normal position
                   curve: Curves.easeInOut,
-                  delay: Duration(milliseconds: 400),
-                  duration: const Duration(milliseconds: 800),
+                  delay: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 500),
                 ),
 
             Divider(
@@ -137,8 +137,8 @@ class _CartScreenState extends State<CartScreen>
                   begin: -5, // Start below the screen
                   end: 0, // End at normal position
                   curve: Curves.easeInOut,
-                  delay: Duration(milliseconds: 1500),
-                  duration: const Duration(milliseconds: 1300),
+                  delay: const Duration(milliseconds: 1000),
+                  duration: const Duration(milliseconds: 500),
                 ),
             const SizedBox(height: MySizes.spaceBtwItems),
 
@@ -169,8 +169,8 @@ class _CartScreenState extends State<CartScreen>
                         begin: -5, // Start below the screen
                         end: 0, // End at normal position
                         curve: Curves.easeInOut,
-                        delay: Duration(milliseconds: 1500),
-                        duration: const Duration(milliseconds: 1300),
+                        delay: const Duration(milliseconds: 1000),
+                        duration: const Duration(milliseconds: 500),
                       ),
                   const SizedBox(height: MySizes.spaceBtwItems / 2),
 
@@ -222,8 +222,8 @@ class _CartScreenState extends State<CartScreen>
                         begin: -5, // Start below the screen
                         end: 0, // End at normal position
                         curve: Curves.easeInOut,
-                        delay: Duration(milliseconds: 1500),
-                        duration: const Duration(milliseconds: 1300),
+                        delay: const Duration(milliseconds: 1000),
+                        duration: const Duration(milliseconds: 500),
                       ),
 
                   /// Total Price
@@ -246,10 +246,11 @@ class _CartScreenState extends State<CartScreen>
                   ),
                 ],
               ).animate().slideY(
-                    begin: 1, // Start below the screen
+                    begin: 0.3, // Start below the screen
                     end: 0, // End at normal position
                     curve: Curves.easeInOut,
-                    duration: const Duration(milliseconds: 800),
+                    delay: Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 500),
                   ),
             )
           ],

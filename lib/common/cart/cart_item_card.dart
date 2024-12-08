@@ -30,12 +30,11 @@ class CartItemCard extends StatelessWidget {
         return Container(
           decoration: getDynamicBoxDecoration(context),
           width: MediaQuery.of(context).size.width,
-          height: 75.h,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
-                /// image
+                // image
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: SizedBox(
@@ -51,7 +50,7 @@ class CartItemCard extends StatelessWidget {
 
                 const SizedBox(width: MySizes.spaceBtwItems),
 
-                /// title, price, size
+                // title, price, size
                 Expanded(
                   child: Column(
                     children: [
@@ -76,7 +75,7 @@ class CartItemCard extends StatelessWidget {
                             ],
                           ),
 
-                          /// Price
+                          // Price
                           Row(
                             children: [
                               Text('₹120',
@@ -91,7 +90,7 @@ class CartItemCard extends StatelessWidget {
 
                       const SizedBox(height: 2),
 
-                      /// Product name
+                      // Product name
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(

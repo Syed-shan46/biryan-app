@@ -1,8 +1,10 @@
 import 'package:biriyani/common/image/my_circular_image.dart';
+import 'package:biriyani/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 
-class UserProfileTile extends StatefulWidget {
+class UserProfileTile extends ConsumerStatefulWidget {
   const UserProfileTile({
     super.key,
     this.onPressed,
@@ -11,24 +13,26 @@ class UserProfileTile extends StatefulWidget {
   final VoidCallback? onPressed;
 
   @override
-  State<UserProfileTile> createState() => _UserProfileTileState();
+  ConsumerState<UserProfileTile> createState() => _UserProfileTileState();
+
 }
 
-class _UserProfileTileState extends State<UserProfileTile> {
+
+
+class _UserProfileTileState extends ConsumerState<UserProfileTile> {
   @override
   Widget build(BuildContext context) {
-    String userName = 'Hello!';
-    String email = 'NotLoggedIn@gmail.com';
+    final user = ref.watch(userProvider);
     return ListTile(
         leading: const MyCircularImage(
             image: 'assets/images/man.png', width: 50, height: 50, padding: 0),
-        title: Text(userName,
+        title: Text(user?.phone ?? 'User id not available',
             style: Theme.of(context)
                 .textTheme
                 .labelMedium!
                 .apply(color: Colors.white)),
         subtitle: Text(
-          email,
+          user?.id ?? 'User id not available',
           style: Theme.of(context)
               .textTheme
               .labelMedium!

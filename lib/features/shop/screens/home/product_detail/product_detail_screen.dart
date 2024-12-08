@@ -375,7 +375,7 @@ class _ProductDetailImagesState extends State<ProductDetailImages> {
             )
                 .animate(delay: 400.ms)
                 .shimmer(duration: widget.playDuration - 200.ms)
-                .flip(),
+                .fade(),
 
             // Positioning the AppBar above the CarouselSlider
             Positioned(

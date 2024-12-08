@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:biriyani/features/authentication/onboarding/widgets/animated_button_widget.dart';
-import 'package:biriyani/features/authentication/onboarding/widgets/animated_description_widget.dart';
-import 'package:biriyani/features/authentication/onboarding/widgets/animated_dish_widget.dart';
-import 'package:biriyani/features/authentication/onboarding/widgets/animated_title_widget.dart';
+import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_button_widget.dart';
+import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_description_widget.dart';
+import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_dish_widget.dart';
+import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_title_widget.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';

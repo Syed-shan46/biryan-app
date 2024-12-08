@@ -5,6 +5,7 @@ import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/text_theme.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -23,10 +24,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late String password;
   bool isChecked = false;
 
-  /// Controllers
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passWordController = TextEditingController();
+  // Controllers
+  final  emailController = TextEditingController();
+  final  passWordController = TextEditingController();
+  final formkey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passWordController.dispose();
+  }
+
+  Future<void> createUserWithEmailAndPassword() async {
+    try {
+      final userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passWordController.text.trim(),
+      );
+      print(userCredential);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,27 +73,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(height: MySizes.spaceBtwInputFields),
 
                     /// Username
-                    MyTextField(
-                      onChanged: (value) {
-                        userName = value;
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a username';
-                        }
-                        return null;
-                      },
-                      labelText: 'Username',
-                      icon: Iconsax.user,
-                    ),
 
                     const SizedBox(height: MySizes.spaceBtwInputFields),
 
                     /// Email
                     MyTextField(
-                      onChanged: (value) {
-                        email = value;
-                      },
+                     controller: emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter an email';
@@ -89,9 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                     /// password
                     MyTextField(
-                      onChanged: (value) {
-                        password = value;
-                      },
+                      controller: passWordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a password';
@@ -114,7 +118,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: 24,
                           height: 24,
                           child: Checkbox(
-                            side: BorderSide(color: ThemeUtils.dynamicTextColor(context)),
+                            side: BorderSide(
+                                color: ThemeUtils.dynamicTextColor(context)),
                             activeColor: AppColors.primaryColor,
                             value: isChecked,
                             checkColor: Colors.white,
@@ -177,7 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(25))),
                   ),
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {}
+                    await createUserWithEmailAndPassword();
                   },
                   child: Text('Create Account',
                       style: TextStyle(

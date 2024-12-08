@@ -2,14 +2,19 @@
   "cSpell.words": [
     "appbar",
     "biriyani",
+    "flickr",
+    "formkey",
     "Getx",
     "iconsax",
     "Jordon",
     "Navbg",
     "opencart",
     "Parakunnam",
+    "phonecontroller",
     "screenutil",
     "Shawarma",
-    "uidata"
-  ]
+    "uidata",
+    "userjson"
+  ],
+  "git.ignoreLimitWarning": true
 }

@@ -1,25 +1,32 @@
 import 'package:biriyani/common/custom_shapes/primary_header_container.dart';
-import 'package:biriyani/features/authentication/screens/login/login.dart';
+import 'package:biriyani/features/authentication/controllers/auth_controller.dart';
+import 'package:biriyani/features/authentication/screens/login/phone_verification_page.dart';
 import 'package:biriyani/features/shop/screens/cart/cart_screen.dart';
 import 'package:biriyani/features/shop/screens/profile/widgets/settings_menu_tile.dart';
 import 'package:biriyani/features/shop/screens/profile/widgets/user_profile_tile.dart';
+import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
+import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  final AuthController authController = AuthController();
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -41,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         end: 0, // End at normal position
                         curve: Curves.easeInOut,
                         delay: const Duration(milliseconds: 200),
-                        duration: const Duration(milliseconds: 1400),
+                        duration: const Duration(milliseconds: 200),
                       ),
                   const SizedBox(
                     height: MySizes.spaceBtwItems,
@@ -82,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         end: 0, // End at normal position
                         curve: Curves.easeInOut,
                         delay: const Duration(milliseconds: 200),
-                        duration: const Duration(milliseconds: 400),
+                        duration: const Duration(milliseconds: 300),
                       ),
                 ),
                 InkWell(
@@ -97,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         end: 0, // End at normal position
                         curve: Curves.easeInOut,
                         delay: const Duration(milliseconds: 200),
-                        duration: const Duration(milliseconds: 600),
+                        duration: const Duration(milliseconds: 400),
                       ),
                 ),
                 const MySettingsMenuTile(
@@ -110,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       end: 0, // End at normal position
                       curve: Curves.easeInOut,
                       delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 800),
+                      duration: const Duration(milliseconds: 500),
                     ),
                 const MySettingsMenuTile(
                         icon: Iconsax.discount_shape,
@@ -122,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       end: 0, // End at normal position
                       curve: Curves.easeInOut,
                       delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 1000),
+                      duration: const Duration(milliseconds: 600),
                     ),
                 const MySettingsMenuTile(
                         icon: Iconsax.notification,
@@ -134,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       end: 0, // End at normal position
                       curve: Curves.easeInOut,
                       delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 1200),
+                      duration: const Duration(milliseconds: 700),
                     ),
                 const MySettingsMenuTile(
                   icon: Iconsax.security_card,
@@ -145,97 +152,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       end: 0, // End at normal position
                       curve: Curves.easeInOut,
                       delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 1400),
+                      duration: const Duration(milliseconds: 800),
                     ),
 
                 const SizedBox(height: MySizes.spaceBtwItems),
                 SizedBox(
-                  height: 45,
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent.withOpacity(0.8),
-                        side: const BorderSide(
-                          color: Colors.blueAccent,
-                        )),
-                    onPressed: () {
-                      Get.to(() => const LoginScreen());
-                      // Logout logic
+                    height: 45,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        if (user == null) {
+                          // Redirect to Login
+                          Get.to(() => PhoneVerificationPage());
+                        } else {
+                          // Logout logic
 
-                      // showModalBottomSheet(
-                      //   context: context,
-                      //   builder: (BuildContext context) {
-                      //     return Container(
-                      //       width: MediaQuery.of(context).size.width,
-                      //       height: 120.h,
-                      //       decoration: const BoxDecoration(
-                      //           // image: DecorationImage(
-                      //           //   colorFilter: ColorFilter.mode(ThemeUtils.sameBrightness(context), BlendMode.dstATop),
-                      //           //   image: AssetImage('assets/images/products/bg-3.png'),
-                      //           //   fit: BoxFit.contain,
-                      //           // ),
-                      //           ),
-                      //       child: Padding(
-                      //         padding: EdgeInsets.all(9.h),
-                      //         child: Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.center,
-                      //           children: [
-                      //             SizedBox(height: 10.h),
-                      //             const Text(
-                      //               'Are You Sure Want to Logout',
-                      //               style: TextStyle(
-                      //                   fontSize: 18,
-                      //                   fontWeight: FontWeight.w600),
-                      //             ),
-                      //             const SizedBox(height: MySizes.spaceBtwItems),
-                      //             Row(
-                      //               mainAxisAlignment: MainAxisAlignment.center,
-                      //               children: [
-                      //                 ElevatedButton(
-                      //                   onPressed: () {
-                      //                     Navigator.pop(context);
-                      //                   },
-                      //                   child: Text(
-                      //                     'No',
-                      //                     style: TextStyle(
-                      //                       color: ThemeUtils.sameBrightness(
-                      //                           context),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 const SizedBox(width: 20),
-                      //                 ElevatedButton(
-                      //                   style: ElevatedButton.styleFrom(
-                      //                       backgroundColor:
-                      //                           Colors.red.withOpacity(0.8)),
-                      //                   onPressed: () async {},
-                      //                   child: const Text('Yes',
-                      //                       style: TextStyle(
-                      //                         color: Colors.white,
-                      //                       )),
-                      //                 ),
-                      //               ],
-                      //             )
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     );
-                      //   },
-                      // );
-                    },
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.8), fontSize: 16),
-                    ),
-                  ).animate().slideY(
-                        begin: 5, // Start below the screen
-                        end: 0, // End at normal position
-                        curve: Curves.easeInOut,
-                        delay: const Duration(milliseconds: 200),
-                        duration: const Duration(milliseconds: 1600),
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 120.h,
+                                decoration: BoxDecoration(
+                                    // image: DecorationImage(
+                                    //   colorFilter: ColorFilter.mode(ThemeUtils.sameBrightness(context), BlendMode.dstATop),
+                                    //   image: AssetImage('assets/images/products/bg-3.png'),
+                                    //   fit: BoxFit.contain,
+                                    // ),
+                                    ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(9.h),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(height: 10.h),
+                                      Text(
+                                        'Are You Sure Want to Logout',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(height: MySizes.spaceBtwItems),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              'No',
+                                              style: TextStyle(
+                                                color:
+                                                    ThemeUtils.sameBrightness(
+                                                        context),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 20),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red
+                                                    .withOpacity(0.8)),
+                                            onPressed: () async {
+                                              await authController.signOutUser(
+                                                context: context,
+                                                ref: ref,
+                                              );
+                                            },
+                                            child: Text('Yes',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                )),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
+                      style: ButtonStyle(
+                          side: WidgetStateProperty.all(BorderSide(
+                              color: user == null
+                                  ? AppColors.primaryColor
+                                  : Colors.red))),
+                      child: Text(
+                        user == null ? 'Login' : 'Logout',
+                        style: TextStyle(
+                            color: user == null
+                                ? AppColors.primaryColor
+                                : Colors.red),
                       ),
-                ),
+                    )),
               ],
             ),
           )
