@@ -4,6 +4,8 @@ import 'package:biriyani/features/authentication/screens/onboarding/widgets/anim
 import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_description_widget.dart';
 import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_dish_widget.dart';
 import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_title_widget.dart';
+import 'package:biriyani/features/shop/screens/home/home_screen.dart';
+import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -16,7 +18,7 @@ class OnboardingScreen extends StatefulWidget {
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen>  
+class _OnboardingScreenState extends State<OnboardingScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
@@ -34,7 +36,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
-      final mainPlayDuration = 1000.ms;
+    final mainPlayDuration = 1000.ms;
     final leavesDelayDuration = 600.ms;
     final titleDelayDuration = mainPlayDuration + 50.ms;
     final descriptionDelayDuration = titleDelayDuration + 300.ms;
@@ -82,12 +84,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 _controller.addStatusListener((status) {
                   if (status == AnimationStatus.completed) {
                     Future.delayed(400.ms, () {
-                      Get.toNamed('/home');
+                      Get.to(() => const NavigationMenu());
                     });
                   }
                 });
               },
-              child: AnimatedButtonWidget(  
+              child: AnimatedButtonWidget(
                   buttonPlayDuration: buttonPlayDuration,
                   buttonDelayDuration: buttonDelayDuration),
             ),

@@ -1,19 +1,37 @@
 import 'package:flutter/material.dart';
 
-class NoAnimationTransition extends MaterialPageRoute {
-  NoAnimationTransition(
-      {required super.builder, RouteSettings? routeSettings})
-      : super(maintainState: true, fullscreenDialog: false);
+/// A widget to disable all animations except for specified conditions.
+class NoTransitionAnimation extends StatelessWidget {
+  final Widget child;
+  final bool enableFadeOnReverse; // Allows enabling FadeTransition for reverse
+
+  const NoTransitionAnimation({
+    super.key,
+    required this.child,
+    this.enableFadeOnReverse = false,
+  });
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
-    if (animation.status == AnimationStatus.reverse) {
-      return FadeTransition(
-        opacity: animation,
-        child: child,
-      );
-    }
-    return child;
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: ModalRoute.of(context)?.animation ?? kAlwaysDismissedAnimation,
+      builder: (context, _) {
+        final animation = ModalRoute.of(context)?.animation;
+
+        if (animation == null) return child;
+
+        // Apply fade effect only for reverse animation if enabled.
+        if (enableFadeOnReverse &&
+            animation.status == AnimationStatus.reverse) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        }
+
+        // Otherwise, return the child without animation.
+        return child;
+      },
+    );
   }
 }

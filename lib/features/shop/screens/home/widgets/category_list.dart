@@ -76,6 +76,9 @@ class _CategoryListState extends ConsumerState<CategoryList> {
                       child: Image.network(
                         category.image,
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.image_not_supported, size: 30.h);
+                        },
                       ),
                     ),
                   ),

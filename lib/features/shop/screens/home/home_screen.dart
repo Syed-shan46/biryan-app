@@ -5,6 +5,7 @@ import 'package:biriyani/features/shop/screens/home/widgets/category_list.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/home_header.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/food_list.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/my_dot_navigation.dart';
+import 'package:biriyani/utils/animation/page_transition.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,9 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 8.w),
-                child: const CategoryList(),
+              NoTransitionAnimation(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8.w),
+                  child: const CategoryList(),
+                ),
               ),
               const SizedBox(height: MySizes.spaceBtwItems / 2),
               const MyBannerSlider(),

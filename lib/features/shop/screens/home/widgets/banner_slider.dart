@@ -1,6 +1,5 @@
 import 'package:biriyani/features/shop/controllers/home_controller.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/banner_widget.dart';
-import 'package:biriyani/features/shop/screens/home/widgets/my_dot_navigation.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -46,7 +45,7 @@ class _MyBannerSliderState extends State<MyBannerSlider> {
               imageUrl: 'assets/banners/bn-3.jpg',
             ),
           ].animate(delay: 400.ms).shimmer(
-                duration: 1000.ms,
+                duration: 1000.ms,  
               ),
         ),
       ],

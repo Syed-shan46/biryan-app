@@ -1,8 +1,6 @@
-import 'package:biriyani/features/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:biriyani/features/shop/controllers/home_controller.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 
 class MyDotNavigation extends StatelessWidget {
@@ -22,9 +20,10 @@ class MyDotNavigation extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               for (int i = 0; i < dotCount; i++)
-                Container(
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500), // Set the smooth animation duration
                   height: 5,
-                  width: 15,
+                  width: controller.carousalCurrentIndex.value == i ? 20 : 15, // Dynamically resize for active dot
                   decoration: BoxDecoration(
                     color: controller.carousalCurrentIndex.value == i
                         ? AppColors.primaryColor
@@ -41,7 +40,8 @@ class MyDotNavigation extends StatelessWidget {
                               )
                             : BorderRadius.zero,
                   ),
-                )
+                  
+                ),
             ],
           ),
         )

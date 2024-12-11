@@ -1,6 +1,7 @@
 import 'package:biriyani/common/app_style.dart';
 import 'package:biriyani/common/reusable_text.dart';
 import 'package:biriyani/features/authentication/models/product.dart';
+import 'package:biriyani/features/shop/screens/home/product_detail/product_detail_screen.dart';
 import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/helpers/box_decoration_helper.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
@@ -14,26 +15,18 @@ import 'package:iconsax/iconsax.dart';
 class FoodWidget extends StatelessWidget {
   const FoodWidget({
     super.key,
-    required this.image,
-    required this.title,
-    required this.time,
-    required this.price,
     required this.product,
     this.onTap,
   });
 
-  final String image;
-  final String title;
-  final String time;
-  final String price;
-   final Product product;
+  final Product product;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed('product_details');
+        Get.to(() => ProductDetailScreen(product: product));
       },
       child: Padding(
         padding: EdgeInsets.only(right: 12.w),
@@ -55,8 +48,8 @@ class FoodWidget extends StatelessWidget {
                     child: SizedBox(
                       height: 100.h,
                       width: width * 0.8,
-                      child: Image.asset(
-                        image,
+                      child: Image.network(
+                        product.images[0],
                         fit: BoxFit.cover,
                       ).animate(delay: 400.ms).shimmer(
                             duration: 1000.ms,
@@ -129,7 +122,7 @@ class FoodWidget extends StatelessWidget {
                           style: appStyle(9, Colors.grey, FontWeight.w500),
                         ),
                         ReusableText(
-                          text: time,
+                          text: '20min',
                           style: appStyle(9, Colors.grey, FontWeight.w500),
                         ),
                       ],

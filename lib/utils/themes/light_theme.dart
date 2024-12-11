@@ -16,8 +16,8 @@ final ThemeData lightTheme = ThemeData(
       onError: Colors.white,
       onSurface: AppColors.lightTextColor,
     ),
-    appBarTheme: const AppBarTheme(
-      color: Colors.white,
+    appBarTheme:  const AppBarTheme(
+      color: AppColors.lightBackground,
       iconTheme: IconThemeData(color: AppColors.darkBackground),
       titleTextStyle: TextStyle(
         color: AppColors.darkTextColor,

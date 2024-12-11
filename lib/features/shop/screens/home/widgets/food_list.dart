@@ -1,10 +1,11 @@
 import 'package:biriyani/features/shop/controllers/productController.dart';
+import 'package:biriyani/features/shop/screens/home/product_detail/product_detail_screen.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/food_widget.dart';
 import 'package:biriyani/provider/product_provider.dart';
-import 'package:biriyani/utils/constants/uidata.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class FoodList extends ConsumerStatefulWidget {
   const FoodList({super.key});
@@ -44,13 +45,12 @@ class _FoodListState extends ConsumerState<FoodList> {
         clipBehavior: Clip.none,
         itemBuilder: (context, i) {
           final product = products[i];
-          var food = foods[i];
+
           return FoodWidget(
             product: product,
-            image: food['imageUrl'].toString(),
-            title: food['title'],
-            price: food['price'].toStringAsFixed(2),
-            time: food['time'],
+            onTap: () {
+              Get.to(() => ProductDetailScreen(product: product));
+            },
           );
         },
       ),
