@@ -8,7 +8,7 @@ BoxDecoration getDynamicBoxDecoration(BuildContext context) {
 
   return BoxDecoration(
     color: isDarkMode
-        ?  Colors.blueGrey.withOpacity(0.1)
+        ? Colors.blueGrey.withOpacity(0.1)
         : ThemeUtils.sameBrightness(context), // Base color for the box
     boxShadow: isDarkMode
         ? [] // No shadow in dark mode

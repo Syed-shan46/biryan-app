@@ -2,6 +2,7 @@ import 'package:biriyani/common/cart/cart_icon.dart';
 import 'package:biriyani/common/cart/cart_item_card.dart';
 import 'package:biriyani/features/authentication/screens/login/login.dart';
 import 'package:biriyani/navigation_menu.dart';
+import 'package:biriyani/provider/cart_provider.dart';
 import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
@@ -9,18 +10,19 @@ import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class CartScreen extends StatefulWidget {
+class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _CartScreenState createState() => _CartScreenState();
+  ConsumerState createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen>
+class _CartScreenState extends ConsumerState<CartScreen>
     with SingleTickerProviderStateMixin {
   //Checking if already address is on Db
   late final AnimationController _controller;
@@ -39,6 +41,8 @@ class _CartScreenState extends State<CartScreen>
 
   @override
   Widget build(BuildContext context) {
+    final cartData = ref.watch(cartProvider);
+    final _cartProvider = ref.watch(cartProvider.notifier);
     return Scaffold(
       /// Appbar
       appBar: AppBar(
@@ -114,11 +118,13 @@ class _CartScreenState extends State<CartScreen>
                 ),
 
             // Cart items card
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(MySizes.spaceBtwItems),
               child: CartItemCard(
                 showQuantity: false,
                 showButtons: true,
+                cartData: cartData,
+                cartProvider: _cartProvider,
               ),
             ).animate().slideY(
                   begin: 0.3, // Start below the screen

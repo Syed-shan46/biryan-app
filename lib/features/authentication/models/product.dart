@@ -7,6 +7,7 @@ class Product {
   final String id; // Unique identifier for the product.
   final String itemName; // Name of the product.
   final int itemPrice; // Price of the product (stored as an integer).
+  final int? quantity;
   final String description;
   final bool isAdditional; // Detailed description of the product.
   final String category; // Category to which the product belongs.
@@ -16,6 +17,7 @@ class Product {
   // The constructor for the `Product` class. It takes all required parameters
   // to initialize a product object with specific values for each field.
   Product({
+    this.quantity,
     required this.id, // Assigns the `id` parameter to the `id` property.
     required this.itemName, // Assigns the `productName` parameter to the `productName` property.
     required this.itemPrice, // Assigns the `productPrice` parameter to the `productPrice` property.
@@ -30,6 +32,7 @@ class Product {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id, // Storing the `id` field in the map with a key of 'id'.
+      'quantity': quantity,
       'itemName':
           itemName, // Storing the `productName` field in the map with a key of 'productName'.
       'itemPrice':
@@ -55,7 +58,7 @@ class Product {
             as String, // Extracts the `productName` from the map and assigns it.
         itemPrice: map['itemPrice']
             as int, // Extracts the `productPrice` from the map and assigns it.
-
+        quantity: map['quantity'] as int,
         description: map['description']
             as String, // Extracts the `description` from the map and assigns it.
         category: map['category']
