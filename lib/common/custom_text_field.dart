@@ -44,7 +44,7 @@ class CustomTextWidget extends StatelessWidget {
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(9.r),
             borderSide: BorderSide(
-              color: AppColors.darkTextColor, // Replace with desired color
+              color: ThemeUtils.dynamicTextColor(context), // Replace with desired color
               width: 1.w, // Adjust thickness
             ),
           ),

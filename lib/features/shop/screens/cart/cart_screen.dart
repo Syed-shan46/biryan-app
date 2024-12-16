@@ -1,10 +1,12 @@
 import 'package:biriyani/common/cart/cart_icon.dart';
 import 'package:biriyani/common/cart/cart_item_card.dart';
 import 'package:biriyani/features/authentication/screens/login/login.dart';
+import 'package:biriyani/features/shop/controllers/order_controller.dart';
 import 'package:biriyani/features/shop/models/cart_model.dart';
 import 'package:biriyani/features/shop/screens/order/success_screen.dart';
 import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/provider/cart_provider.dart';
+import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
@@ -64,9 +66,12 @@ class _CartScreenState extends ConsumerState<CartScreen>
   Widget build(BuildContext context) {
     final welcomeOffer = 50;
     final cartData = ref.watch(cartProvider);
-    final totalAmount = getTotalAmount(cartData) - welcomeOffer ;
+    final totalAmount = getTotalAmount(cartData);
     final _cartProvider = ref.watch(cartProvider.notifier);
-    
+    final _cartNotifier = ref.read(cartProvider.notifier);
+    final user = ref.watch(userProvider);
+
+    final OrderController _orderController = OrderController();
     return Scaffold(
       /// Appbar
       appBar: AppBar(
@@ -101,6 +106,28 @@ class _CartScreenState extends ConsumerState<CartScreen>
           height: 50,
           child: ElevatedButton(
             onPressed: () { 
+ 
+              Future.forEach(_cartProvider.getCartItems.entries, (entry) {
+                var item = entry.value;
+                _orderController.createOrders(
+                  name: user!.id,
+                  phone: user.phone,
+                  
+                  address: 'Thekkinkad ho pallanchathannur',
+                  id: user.id,
+                  productName: item.itemName,
+                  quantity: item.quantity,
+                  category: item.category,
+                  image: item.image[0],
+                  totalAmount: item.totalPrice,
+                  paymentStatus: 'Success',
+                  orderStatus: 'Processing',
+                  delivered: false,
+                  context: context,
+                );
+              });
+             
+            
               Get.to(()=> const SuccessScreen());
             },
             style: ElevatedButton.styleFrom(
@@ -111,7 +138,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
               ),
             ),
             child: Text(
-              'Place Order ₹$totalAmount',
+              'Place Order ₹${totalAmount-welcomeOffer}',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
@@ -287,7 +314,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '₹$totalAmount',
+                        '₹${totalAmount- welcomeOffer}',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.bold, color: AppColors.accentColor),
                       )
