@@ -1,6 +1,8 @@
 import 'package:biriyani/common/cart/cart_icon.dart';
 import 'package:biriyani/common/cart/cart_item_card.dart';
 import 'package:biriyani/features/authentication/screens/login/login.dart';
+import 'package:biriyani/features/shop/models/cart_model.dart';
+import 'package:biriyani/features/shop/screens/order/success_screen.dart';
 import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/provider/cart_provider.dart';
 import 'package:biriyani/utils/constants/constants.dart';
@@ -13,9 +15,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
-  const CartScreen({super.key});
+  const CartScreen({super.key, this.showBackArrow = false });
+
+  final bool showBackArrow;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -39,14 +44,33 @@ class _CartScreenState extends ConsumerState<CartScreen>
     super.dispose();
   }
 
+  double getEachTotal(Map<String, Cart> cartData) {
+    double eachTotal = 0.0;
+    cartData.forEach((key, cartItem) {
+      eachTotal += cartItem.totalPrice; // Use the totalPrice method
+    });
+    return eachTotal;
+  }
+
+  double getTotalAmount(Map<String, Cart> cartData) {
+    double total = 0.0;
+    cartData.forEach((key, cartItem) {
+      total += cartItem.itemPrice * cartItem.quantity; // Calculate total
+    });
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final welcomeOffer = 50;
     final cartData = ref.watch(cartProvider);
+    final totalAmount = getTotalAmount(cartData) - welcomeOffer ;
     final _cartProvider = ref.watch(cartProvider.notifier);
+    
     return Scaffold(
       /// Appbar
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: widget.showBackArrow? true : false,
         title: const Text('Cart').animate().slideY(
               begin: 10, // Start below the screen
               end: 0, // End at normal position
@@ -70,12 +94,15 @@ class _CartScreenState extends ConsumerState<CartScreen>
       ),
 
       // Checkout button
-      bottomNavigationBar: Padding(
+      bottomNavigationBar:  cartData.isEmpty
+          ? const PurchaseBtn():  Padding(
         padding: const EdgeInsets.all(MySizes.defaultSpace),
         child: SizedBox(
           height: 50,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () { 
+              Get.to(()=> const SuccessScreen());
+            },
             style: ElevatedButton.styleFrom(
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -84,7 +111,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
               ),
             ),
             child: Text(
-              'Checkout ₹199',
+              'Place Order ₹$totalAmount',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
@@ -100,8 +127,24 @@ class _CartScreenState extends ConsumerState<CartScreen>
         ),
       ),
 
-      /// Heading and cart items
-      body: SingleChildScrollView(
+      // Heading and cart items
+      body:cartData.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.network(
+                    'https://lottie.host/e5c80fca-fe94-4bed-9424-e0d70204d1aa/lhGyjYqBYY.json',
+                    width: 350,
+                    height: 350,
+                    fit: BoxFit.fill,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('Shopping Cart is Empty'),
+                ],
+              ),
+            )
+          : SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -148,7 +191,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                 ),
             const SizedBox(height: MySizes.spaceBtwItems),
 
-            /// Coupon box
+            // Coupon box
 
             const SizedBox(height: MySizes.spaceBtwItems),
 
@@ -159,7 +202,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('*FREE Delivery available only India'),
+                  const Text('*FREE Delivery available With in 5Kms'),
                   const SizedBox(height: MySizes.spaceBtwItems),
                   Text(
                     'Price',
@@ -183,9 +226,9 @@ class _CartScreenState extends ConsumerState<CartScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('${2} items'),
+                       Text('${cartData.length} items'),
                       Text(
-                        '₹199',
+                        '₹$totalAmount',
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium!
@@ -198,11 +241,11 @@ class _CartScreenState extends ConsumerState<CartScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Coupon Offer'),
+                      const Text('Welcome Offer'),
                       Text(
-                        '- \$00.00',
+                        '- ₹50.00',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold, color: Colors.green),
+                            fontWeight: FontWeight.bold, color: Colors.red.withOpacity(0.9)),
                       )
                     ],
                   ),
@@ -216,7 +259,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                       Text(
                         '+ 00.00',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold, color: Colors.red),
+                            fontWeight: FontWeight.bold, color: Colors.red.withOpacity(0.9)),
                       )
                     ],
                   ),
@@ -232,7 +275,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                         duration: const Duration(milliseconds: 500),
                       ),
 
-                  /// Total Price
+                  // Total Price
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -244,9 +287,9 @@ class _CartScreenState extends ConsumerState<CartScreen>
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '₹199',
+                        '₹$totalAmount',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold, color: Colors.red),
+                            fontWeight: FontWeight.bold, color: AppColors.accentColor),
                       )
                     ],
                   ),
@@ -358,7 +401,7 @@ class PurchaseBtn extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(25))),
             ),
             child: Text(
-              'Purchase now',
+              'Buy Now',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!

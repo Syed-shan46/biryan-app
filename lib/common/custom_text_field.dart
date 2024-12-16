@@ -41,7 +41,28 @@ class CustomTextWidget extends StatelessWidget {
         style: appStyle(11, AppColors.darkTextColor, FontWeight.normal),
         validator: validator,
         decoration: InputDecoration(
-          border: InputBorder.none,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(9.r),
+            borderSide: BorderSide(
+              color: AppColors.darkTextColor, // Replace with desired color
+              width: 1.w, // Adjust thickness
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(9.r),
+            borderSide: BorderSide(
+              color: AppColors.darkTextColor, // Replace with desired color
+              width: 1.w, // Adjust thickness
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(9.r),
+            borderSide: BorderSide(
+              color: AppColors.accentColor, // Replace with desired color
+              width: 1.5.w, // Adjust thickness for focused state
+            ),
+          ),
+        
           hintText: hintText,
           hintStyle: appStyle(11, ThemeUtils.dynamicTextColor(context), FontWeight.normal),
           suffixIcon: suffixIcon,

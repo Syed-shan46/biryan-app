@@ -357,7 +357,7 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
             child: Padding(
               padding: EdgeInsets.only(left: 10.w),
               child: Text(
-                '₹199.0',
+                '₹${widget.product.itemPrice * currentQuantity}',
                 style: appStyle(
                     18, ThemeUtils.dynamicTextColor(context), FontWeight.w600),
               ),
@@ -414,8 +414,8 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
                   foregroundColor: Colors.white.withOpacity(0.9),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r))),
-              onPressed: () async {
-                await Future.delayed(const Duration(seconds: 2));
+              onPressed: ()  {
+                
 
                 try {
                   cartPvr.addItemToCart(
@@ -426,14 +426,9 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
                     quantity: currentQuantity,
                     itemId: widget.product.id,
                   );
-                  Get.snackbar(
-                    'Cart Updated',
-                    'Items Added: ${selectedItems.map((item) => item.addItemName).join(', ')}', // Convert list to string
-                    snackPosition: SnackPosition.BOTTOM,
-                    duration: const Duration(seconds: 2),
-                  );
+                  
 
-                  Get.to(() => const CartScreen());
+                  Get.to(() => const CartScreen(showBackArrow: true,));
                 } finally {}
               },
               child:

@@ -2,19 +2,69 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-class LoadingWidget extends StatelessWidget {
+class LoadingWidget extends StatefulWidget {
   const LoadingWidget({super.key});
+
+  @override
+  State<LoadingWidget> createState() => _LoadingWidgetState();
+}
+
+class _LoadingWidgetState extends State<LoadingWidget> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation;
+  bool isAnimationComplete = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize AnimationController for slide-out animation
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500), // Adjust duration for sliding
+    );
+
+    // Define slide animation (to the left of the screen)
+    _slideAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(-1.5, 0), // Moves 1.5x screen width to the left
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 375.w,
       height: 725.h,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 180.h),
-        child: LottieBuilder.asset("assets/images/delivery4.json",
-            width: 375.w, height: 400,repeat: false,),
+      child: Stack(
+        children: [
+          // Lottie animation wrapped in SlideTransition
+          SlideTransition(
+            position: _slideAnimation,
+            child: LottieBuilder.asset(
+              "assets/images/delivery4.json",
+              width: 375.w,
+              height: 400,
+              repeat: false,
+              onLoaded: (composition) {
+                // Start sliding out after Lottie animation completes
+                Future.delayed(composition.duration, () {
+                  setState(() {
+                    isAnimationComplete = true;
+                    _controller.forward(); // Start slide-out animation
+                  });
+                });
+              },
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // Clean up animation controller
+    super.dispose();
   }
 }

@@ -32,6 +32,7 @@ class CartItemCard extends ConsumerStatefulWidget {
 
 class _CartItemCardState extends ConsumerState<CartItemCard> {
   bool _isExpanded = false;
+  bool isChecked = false; // Local toggle state
   bool _rememberMe = false; // Initial state
   List<Item> selectedItems = [];
 
@@ -41,31 +42,29 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
       if (isSelected) {
         selectedItems.add(item); // Add item to selected list
       } else {
-        selectedItems.remove(item); // Remove item from selected list
+        selectedItems.remove(item); // Remove item from selected list only
       }
     });
   }
 
   void showFullCartData() {
-  final fullCart = widget.cartData.values.toList(); // Access the cart values
-  final fullCartDetails = fullCart.map((cartItem) {
-    return {
-      'itemName': cartItem.itemName,
-      'itemPrice': cartItem.itemPrice,
-      'quantity': cartItem.quantity,
-      'additionalItems': cartItem.additionalItems.map((item) => {
-        'addItemName': item.addItemName,
-        'addItemPrice': item.addItemPrice,
-      }).toList(),
-    };
-  }).toList();
+    final fullCart = widget.cartData.values.toList(); // Access the cart values
+    final fullCartDetails = fullCart.map((cartItem) {
+      return {
+        'itemName': cartItem.itemName,
+        'itemPrice': cartItem.itemPrice,
+        'quantity': cartItem.quantity,
+        'additionalItems': cartItem.additionalItems
+            .map((item) => {
+                  'addItemName': item.addItemName,
+                  'addItemPrice': item.addItemPrice,
+                })
+            .toList(),
+      };
+    }).toList();
 
-  Get.snackbar('Additional', '$fullCartDetails');
-
-  
-}
-
-
+    Get.snackbar('Additional', '$fullCartDetails');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -269,25 +268,23 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                                                           ),
                                                                         ),
                                                                         Checkbox(
-                                                                            side:
-                                                                                BorderSide(
-                                                                              color: ThemeUtils.dynamicTextColor(context),
-                                                                            ),
-                                                                            value:
-                                                                                selectedItems.contains(item),
-                                                                            activeColor: AppColors.accentColor,
-                                                                            onChanged: (bool? value) {
-                                                                              setState(() {
-                                                                                if (value!) {
-                                                                                  selectedItems.add(item);
-                                                                                  ref.read(selectedItemsProvider.notifier).addItem(item);
-                                                                                } else {
-                                                                                  selectedItems.remove(item);
-                                                                                  
-                                                                                }
-                                                                              });
-                                                                             
-                                                                            }),
+                                                                          side:
+                                                                              BorderSide(
+                                                                            color:
+                                                                                ThemeUtils.dynamicTextColor(context),
+                                                                          ),
+                                                                          value:
+                                                                               isChecked,
+                                                                          activeColor:
+                                                                              AppColors.accentColor,
+                                                                         onChanged:
+                                                            (bool? value) {
+                                                          setState(() {
+                                                            updateSelectedItems(
+                                                                item, value!);
+                                                          });
+                                                        },
+                                                                        ),
                                                                       ],
                                                                     );
                                                                   },
@@ -303,17 +300,16 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                               ),
                                               ElevatedButton(
                                                   onPressed: () {
-                                                ref
-                                                    .read(cartProvider.notifier)
-                                                    .updateAdditionalItems(
-                                                      cartItem.itemId,
-                                                      ref.read(
-                                                          selectedItemsProvider),
-                                                    );
+                                                    ref.read(cartProvider.notifier)
+                                                        .updateAdditionalItems(
+                                                          cartItem.itemId,
+                                                          ref.read(
+                                                              selectedItemsProvider),
+                                                        );
 
-                                                     showFullCartData();
-                                                Navigator.pop(context);
-                                              },
+                                                    showFullCartData();
+                                                    Navigator.pop(context);
+                                                  },
                                                   child: Text('Update')),
                                             ],
                                           );
@@ -323,7 +319,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Request',
+                                      'Additional',
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: ThemeUtils.dynamicTextColor(

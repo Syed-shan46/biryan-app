@@ -97,7 +97,7 @@ showModalBottomSheet(
                                                 context),
                                           ),
                                         ),
-                                        const Divider(
+                                        const Divider(      
                                           thickness: 0.3,
                                           color: Colors.grey,
                                         ),
@@ -106,7 +106,7 @@ showModalBottomSheet(
                                           padding: const EdgeInsets.all(10),
                                           decoration:
                                               getDynamicBoxDecoration(context),
-                                          child: Column(
+                                          child: Column(  
                                             children: items.map((item) {
                                               bool isSelected =
                                                   selectedItems.contains(item);
@@ -143,17 +143,17 @@ showModalBottomSheet(
                                                               .dynamicTextColor(
                                                                   context),
                                                         ),
-                                                        value: selectedItems
-                                                            .contains(item),
+                                                          value: selectedItems
+                                                              .contains(item),
                                                         activeColor: AppColors
                                                             .accentColor,
-                                                        onChanged:
-                                                            (bool? value) {
-                                                          setState(() {
-                                                            updateSelectedItems(
-                                                                item, value!);
-                                                          });
-                                                        },
+                                                          onChanged:
+                                                              (bool? value) {
+                                                            setState(() {
+                                                              updateSelectedItems(
+                                                                  item, value!);
+                                                            });
+                                                          },
                                                       ),
                                                     ],
                                                   );

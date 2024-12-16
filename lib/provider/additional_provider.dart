@@ -17,6 +17,11 @@ class SelectedItemsProvider extends StateNotifier<List<Item>> {
     }
   }
 
+  // Update selected items
+  void updateItems(List<Item> newItems) {
+    state = newItems; // Update the state with the new list of items
+  }
+
   // Method to remove an item from the selected list
   void removeItem(Item item) {
     state = state.where((existingItem) => existingItem != item).toList();
