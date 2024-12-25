@@ -4,7 +4,6 @@ import 'package:biriyani/features/authentication/screens/onboarding/widgets/anim
 import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_description_widget.dart';
 import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_dish_widget.dart';
 import 'package:biriyani/features/authentication/screens/onboarding/widgets/animated_title_widget.dart';
-import 'package:biriyani/features/shop/screens/home/home_screen.dart';
 import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';

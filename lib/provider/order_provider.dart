@@ -11,8 +11,6 @@ class OrderProvider extends StateNotifier<List<Order>> {
   void setOrders(List<Order> orders) {
     state = orders;
   }
-
-  
 }
 
 final orderProvider = StateNotifierProvider<OrderProvider, List<Order>>((ref) {

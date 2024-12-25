@@ -26,7 +26,7 @@ class MyDotNavigation extends StatelessWidget {
                   width: controller.carousalCurrentIndex.value == i ? 20 : 15, // Dynamically resize for active dot
                   decoration: BoxDecoration(
                     color: controller.carousalCurrentIndex.value == i
-                        ? AppColors.primaryColor
+                        ? AppColors.accentColor
                         : Colors.grey,
                     borderRadius: i == 0
                         ? const BorderRadius.only(

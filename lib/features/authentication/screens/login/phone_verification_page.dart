@@ -1,4 +1,5 @@
 import 'package:biriyani/features/authentication/controllers/auth_controller.dart';
+import 'package:biriyani/features/authentication/screens/login/user_name_screen.dart';
 import 'package:biriyani/navigation_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _PhoneVerificationPageState extends ConsumerState<PhoneVerificationPage> {
   @override
   Widget build(BuildContext context) {
     return PhoneVerification(
-      isFirstPage: true,
+      isFirstPage: false,
       enableLogo: false,
       themeColor: Colors.blueAccent,
       backgroundColor: Colors.black,
@@ -65,6 +66,11 @@ class _PhoneVerificationPageState extends ConsumerState<PhoneVerificationPage> {
           );
           await FirebaseAuth.instance.signInWithCredential(credential);
 
+          // Get the phone number and userId from Firebase Auth
+          User? currentUser = FirebaseAuth.instance.currentUser;
+
+          String userId = currentUser?.uid ?? ''; // Retrieve the UID
+
           // Get the phone number from Firebase Auth
           String phoneNumber =
               FirebaseAuth.instance.currentUser?.phoneNumber ?? '';
@@ -75,7 +81,9 @@ class _PhoneVerificationPageState extends ConsumerState<PhoneVerificationPage> {
           }
 
           // Navigate to the main menu
-          Get.offAll(() => const NavigationMenu());
+          Get.offAll(() => UsernamePage(
+                phone: phoneNumber,
+              ));
         } catch (e) {
           print('OTP verification failed: $e');
         }

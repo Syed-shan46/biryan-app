@@ -2,12 +2,15 @@ import 'package:biriyani/common/custom_shapes/primary_header_container.dart';
 import 'package:biriyani/features/authentication/controllers/auth_controller.dart';
 import 'package:biriyani/features/authentication/screens/login/phone_verification_page.dart';
 import 'package:biriyani/features/shop/screens/cart/cart_screen.dart';
+import 'package:biriyani/features/shop/screens/notifications/notification_screen.dart';
+import 'package:biriyani/features/shop/screens/order/user_orders_screen.dart';
 import 'package:biriyani/features/shop/screens/profile/widgets/settings_menu_tile.dart';
 import 'package:biriyani/features/shop/screens/profile/widgets/user_profile_tile.dart';
 import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +30,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
+
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -39,9 +43,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 children: [
                   UserProfileTile(
                     onPressed: () {
-                      Get.snackbar(' Login', "Please login to continue 😊",
+                      Get.snackbar(
+                          ' Not Available', "We'll add this feature later 😊",
                           backgroundColor:
-                              AppColors.lightBackground.withOpacity(0.6));
+                              AppColors.lightBackground.withOpacity(0.6),
+                          icon: const Icon(Icons.message_outlined));
                     },
                   ).animate().slideY(
                         begin: 5, // Start below the screen
@@ -62,18 +68,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Column(
               children: [
                 // Menu tiles
-                const InkWell(
-                  child: MySettingsMenuTile(
-                      icon: Iconsax.shopping_cart,
-                      title: 'My Address',
-                      subTitle: 'Shopping delivery address'),
-                ).animate().slideX(
-                      begin: -1, // Start below the screen
-                      end: 0, // End at normal position
-                      curve: Curves.easeInOut,
-                      delay: const Duration(milliseconds: 100),
-                      duration: const Duration(milliseconds: 200),
-                    ),
+
                 InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
@@ -93,7 +88,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => const UserOrders());
+                  },
                   child: const MySettingsMenuTile(
                           icon: Iconsax.bag_tick,
                           title: 'My Orders',
@@ -107,42 +104,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         duration: const Duration(milliseconds: 400),
                       ),
                 ),
-                const MySettingsMenuTile(
-                        icon: Iconsax.bank,
-                        title: 'Bank Account',
-                        subTitle: 'Withdraw balance to registered bank account')
-                    .animate()
-                    .slideX(
-                      begin: -1, // Start below the screen
-                      end: 0, // End at normal position
-                      curve: Curves.easeInOut,
-                      delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 500),
-                    ),
-                const MySettingsMenuTile(
-                        icon: Iconsax.discount_shape,
-                        title: 'My Coupons',
-                        subTitle: 'List of all discounted Coupons')
-                    .animate()
-                    .slideX(
-                      begin: -1, // Start below the screen
-                      end: 0, // End at normal position
-                      curve: Curves.easeInOut,
-                      delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 600),
-                    ),
-                const MySettingsMenuTile(
-                        icon: Iconsax.notification,
-                        title: 'Notifications',
-                        subTitle: 'Set any kind of notification message')
-                    .animate()
-                    .slideX(
-                      begin: -1, // Start below the screen
-                      end: 0, // End at normal position
-                      curve: Curves.easeInOut,
-                      delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 700),
-                    ),
+
                 const MySettingsMenuTile(
                   icon: Iconsax.security_card,
                   title: 'Account Privacy',
@@ -152,7 +114,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       end: 0, // End at normal position
                       curve: Curves.easeInOut,
                       delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 800),
+                      duration: const Duration(milliseconds: 500),
+                    ),
+
+                MySettingsMenuTile(
+                  onTap: () {
+                    Get.to(() => const NotificationScreen());
+                  },
+                  icon: Iconsax.notification,
+                  title: 'Notifications',
+                  subTitle: 'See Your all Notifications',
+                ).animate().slideX(
+                      begin: -1, // Start below the screen
+                      end: 0, // End at normal position
+                      curve: Curves.easeInOut,
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 500),
                     ),
 
                 const SizedBox(height: MySizes.spaceBtwItems),
@@ -163,7 +140,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       onPressed: () {
                         if (user == null) {
                           // Redirect to Login
-                          Get.to(() => PhoneVerificationPage());
+                          Get.to(() => const PhoneVerificationPage());
                         } else {
                           // Logout logic
 
@@ -173,7 +150,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: 120.h,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     // image: DecorationImage(
                                     //   colorFilter: ColorFilter.mode(ThemeUtils.sameBrightness(context), BlendMode.dstATop),
                                     //   image: AssetImage('assets/images/products/bg-3.png'),
@@ -187,13 +164,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       SizedBox(height: 10.h),
-                                      Text(
+                                      const Text(
                                         'Are You Sure Want to Logout',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(height: MySizes.spaceBtwItems),
+                                      const SizedBox(
+                                          height: MySizes.spaceBtwItems),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -211,7 +189,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(width: 20),
+                                          const SizedBox(width: 20),
                                           ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                                 backgroundColor: Colors.red
@@ -221,8 +199,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                 context: context,
                                                 ref: ref,
                                               );
+                                              Navigator.pop(context);
                                             },
-                                            child: Text('Yes',
+                                            child: const Text('Yes',
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                 )),

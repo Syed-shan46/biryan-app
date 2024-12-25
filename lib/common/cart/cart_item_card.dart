@@ -156,7 +156,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                                                     cartItem
                                                                         .itemName,
                                                                     style:
-                                                                        TextStyle(
+                                                                        const TextStyle(
                                                                       fontSize:
                                                                           18,
                                                                       fontWeight:
@@ -166,13 +166,13 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                                                           .grey,
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
+                                                                  const SizedBox(
                                                                       width:
                                                                           10),
                                                                   Text(
                                                                     '₹${cartItem.itemPrice}', // Price
                                                                     style:
-                                                                        TextStyle(
+                                                                        const TextStyle(
                                                                       fontSize:
                                                                           18,
                                                                       fontWeight:
@@ -206,7 +206,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                                               ])
                                                             ],
                                                           ),
-                                                          SizedBox(height: 5),
+                                                          const SizedBox(height: 5),
                                                           const Divider(
                                                             thickness: 0.3,
                                                             color: Colors.grey,
@@ -314,7 +314,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                                      showFullCartData();
                                                 Navigator.pop(context);
                                               },
-                                                  child: Text('Update')),
+                                                  child: const Text('Update')),
                                             ],
                                           );
                                         });

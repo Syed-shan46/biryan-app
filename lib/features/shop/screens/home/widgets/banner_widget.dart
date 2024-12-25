@@ -14,6 +14,7 @@ class MyBannerWidget extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Image(
+            
             fit: BoxFit.cover,
             image: AssetImage(imageUrl) as ImageProvider,
           ),

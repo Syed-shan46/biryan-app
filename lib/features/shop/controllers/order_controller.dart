@@ -20,12 +20,14 @@ class OrderController {
     required final String paymentStatus,
     required final String orderStatus,
     required final bool delivered,
+    required final Future<String> customerDeviceToken,
     required context,
   }) async {
     try {
+      String deviceToken = await customerDeviceToken;
       final Order order = Order(
         userId: id,
-        phone: phone,
+        phone: phone, 
         address: address,
         name: name,
         productName: productName,
@@ -36,6 +38,7 @@ class OrderController {
         paymentStatus: paymentStatus,
         orderStatus: orderStatus,
         delivered: delivered,
+        customerDeviceToken: deviceToken,
       );
 
       http.Response response = await http.post(
@@ -48,8 +51,6 @@ class OrderController {
 
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
-
-      
 
       Get.to(() => const SuccessScreen());
     } catch (e) {

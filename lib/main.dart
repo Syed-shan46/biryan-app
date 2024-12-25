@@ -5,21 +5,38 @@ import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/utils/themes/dark_theme.dart';
 import 'package:biriyani/utils/themes/light_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+@pragma('vm:entry-point')
+Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
+
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    subscribe();
+  }
 
   Future<void> _checkTokenAndSetUser(WidgetRef ref) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -34,9 +51,8 @@ class MyApp extends ConsumerWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // Ensure the app initializes properly
-
     return ScreenUtilInit(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
@@ -54,4 +70,11 @@ class MyApp extends ConsumerWidget {
       ),
     );
   }
+}
+
+void subscribe() {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  messaging.subscribeToTopic('all');
+  print('subscribe to all topic');
 }

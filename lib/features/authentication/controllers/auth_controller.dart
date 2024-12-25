@@ -1,5 +1,8 @@
+import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/provider/user_provider.dart';
+import 'package:biriyani/utils/constants/global_variables.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -13,13 +16,23 @@ final providerContainer = ProviderContainer();
 class AuthController {
   // API call to create the user in the backend
   Future<void> handleUserCheck(String phoneNumber, WidgetRef ref) async {
-    const String apiUrl = 'http://10.0.2.2:3000/checkUser';
+    String apiUrl = '$uri/checkUser';
 
     try {
+      String? userDeviceToken = await FirebaseMessaging.instance.getToken();
+      print('userDeviceToken:$userDeviceToken');
+      if (userDeviceToken == null) {
+        print('Unable to retrieve device token.');
+        return;
+      }
+
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({'phone': phoneNumber}),
+        body: json.encode({
+          'phone': phoneNumber,
+          'userDeviceToken': userDeviceToken,
+        }),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -33,9 +46,7 @@ class AuthController {
           SharedPreferences preferences = await SharedPreferences.getInstance();
           await preferences.setString('auth_token', token);
           await preferences.setString('user', jsonEncode(userJson));
-
           ref.read(userProvider.notifier).setUser(jsonEncode(userJson));
-
           print('User set to state: $userJson');
         } else {
           print('User or token is null in response');
@@ -70,6 +81,37 @@ class AuthController {
     } catch (e) {
       // Show error message in case of any issues
       Get.snackbar('Error', 'Error signing out: $e');
+    }
+  }
+
+  Future<void> updateUsername(String userId, String username) async {
+    String apiUrl = '$uri/updateUsername'; // Replace with your API URL
+
+    try {
+      // Construct the request body
+      final Map<String, dynamic> requestBody = {
+        'userId': userId,
+        'username': username,
+      };
+
+      // Send the PATCH request
+      final http.Response response = await http.patch(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      // Handle the response
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        print('Username updated successfully: ${responseData['user']}');
+      } else {
+        print('Failed to update username: ${response.body}');
+      }
+    } catch (error) {
+      print('Error occurred while updating username: $error');
     }
   }
 }

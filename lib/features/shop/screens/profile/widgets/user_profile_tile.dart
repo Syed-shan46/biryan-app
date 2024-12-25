@@ -14,10 +14,7 @@ class UserProfileTile extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<UserProfileTile> createState() => _UserProfileTileState();
-
 }
-
-
 
 class _UserProfileTileState extends ConsumerState<UserProfileTile> {
   @override
@@ -26,13 +23,13 @@ class _UserProfileTileState extends ConsumerState<UserProfileTile> {
     return ListTile(
         leading: const MyCircularImage(
             image: 'assets/images/man.png', width: 50, height: 50, padding: 0),
-        title: Text(user?.phone ?? 'User id not available',
+        title: Text(user?.phone ?? 'Hey Guest',
             style: Theme.of(context)
                 .textTheme
                 .labelMedium!
                 .apply(color: Colors.white)),
         subtitle: Text(
-          user?.id ?? 'User id not available',
+          user?.userName ?? "What's your name",
           style: Theme.of(context)
               .textTheme
               .labelMedium!

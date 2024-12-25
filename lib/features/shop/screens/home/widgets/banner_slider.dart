@@ -43,6 +43,7 @@ class _MyBannerSliderState extends State<MyBannerSlider> {
             ),
             MyBannerWidget(
               imageUrl: 'assets/banners/bn-3.jpg',
+              
             ),
           ].animate(delay: 400.ms).shimmer(
                 duration: 1000.ms,  
