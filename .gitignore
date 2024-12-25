@@ -46,4 +46,3 @@ app.*.map.json
 
 # .gitignore
 .env
-lib/services/get_service_key.dart
