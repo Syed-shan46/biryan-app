@@ -43,6 +43,7 @@ dependencies:
   googleapis_auth: ^1.6.0
   app_settings: ^5.1.1
   cloud_firestore: ^5.6.0
+  flutter_dotenv: ^5.2.1
 
 
 
@@ -66,6 +67,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/banners/
+    - .env
     
 
   
