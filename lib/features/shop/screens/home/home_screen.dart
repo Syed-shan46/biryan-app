@@ -33,10 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
     notificationService.setupInteractMessage(context);
     getServiceToken();
   }
-
   Future<void> getServiceToken() async {
-    String serverToken = await _getServerKey.getServerKeyToken();
-    print("Server Token => $serverToken");
+    try {
+      String serverToken = await _getServerKey.getServerKeyToken();
+      if (serverToken.isNotEmpty) {
+        print("Server Token => $serverToken");
+      } else {
+        print("Error: Retrieved empty server token.");
+      }
+    } catch (e) {
+      print("Error fetching server token: $e");
+    }
   }
 
   @override

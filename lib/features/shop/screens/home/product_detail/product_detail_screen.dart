@@ -380,7 +380,7 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
                   child: const Icon(
                     Icons.remove_circle_outline_outlined,
                     size: 28,
-                    color: AppColors.accentColor,
+                    color: AppColors.primaryColor,
                   ),
                 ),
                 SizedBox(width: 6.w),
@@ -400,7 +400,7 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
                     cartPvr.updateQuantity(widget.product.id, currentQuantity);
                   },
                   child: const Icon(Icons.add_circle_outline_outlined,
-                      size: 28, color: AppColors.accentColor),
+                      size: 28, color: AppColors.primaryColor),
                 ),
               ],
             ),
@@ -410,7 +410,7 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
             height: 37.h,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.accentColor,
+                  backgroundColor: AppColors.primaryColor,
                   foregroundColor: Colors.white.withOpacity(0.9),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r))),

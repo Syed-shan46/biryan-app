@@ -357,7 +357,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                                   cartItem.itemId);
                                         },
                                         child: Image.asset(
-                                            color: AppColors.accentColor,
+                                            color: AppColors.primaryColor,
                                             width: 15,
                                             'assets/icons/icons-minus.png'))
                                     : const Text(''),
@@ -378,7 +378,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                                                   cartItem.itemId);
                                         },
                                         child: Image.asset(
-                                            color: AppColors.accentColor,
+                                            color: AppColors.primaryColor,
                                             width: 13,
                                             'assets/icons/icons-add.png'))
                                     : const Text(''),

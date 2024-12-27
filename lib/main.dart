@@ -22,8 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
-  await dotenv.load(fileName: ".env");
-  print(dotenv.env); // To check the loaded values
+  await dotenv.load();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -38,7 +37,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-    print(dotenv.env); // To check the loaded values
     subscribe();
   }
 
