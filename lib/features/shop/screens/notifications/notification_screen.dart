@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 class NotificationScreen extends StatefulWidget {
   final RemoteMessage? message;
-  const NotificationScreen({super.key, this.message});
+   const NotificationScreen({super.key, this.message});
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();

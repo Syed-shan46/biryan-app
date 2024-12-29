@@ -32,21 +32,18 @@ class _UserOrdersState extends State<UserOrders> with TickerProviderStateMixin {
         elevation: 0,
         title: ReusableText(
             text: "My Orders",
-            style: appStyle(14, AppColors.accentColor, FontWeight.w600)),
+            style: appStyle(16, AppColors.primaryColor, FontWeight.w600)),
       ),
       body: BackGroundContainer(
         color: ThemeUtils.sameBrightness(context),
         child: Column(
           children: [
-            SizedBox(height: 10.h),
-            OrdersTabs(tabController: _tabController),
-            SizedBox(height: 10.h),
+            
+            
             SizedBox(
               height: height * 0.7,
               width: width,
-              child: TabBarView(controller: _tabController, children: const [
-                DeliveredScreen(),
-              ]),
+              child: DeliveredScreen(),
             )
           ],
         ),

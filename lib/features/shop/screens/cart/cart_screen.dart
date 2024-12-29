@@ -164,7 +164,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                         var item = entry.value;
                         SendNotificationService.sendNotificationUsingApi(
                             token:
-                                'dshbJdhqTIieSilsSYtECr:APA91bFqHrL9yc2SFOFCBZ6HaXHhMqlpQxXIyoGYk9HZt2C8HhHuXX95kZAbt1vwvQZPlSBQ4wQwkxBHFJ_R1m7s3fkfraE5K0dvmtx3VhKvaa8IVC2q5As',
+                                'eCa1TFIRRjOFp86ZIlk2z-:APA91bE_9RwIWkKi0a59f3LH1vsL-fOPqf9enq0eNZItRMbzn3y8tgODqFzlsPgDLQSi4IFEAI5nBkfNh67weJM8mAEJJ2zVsWda-pVzHbMaQHdcFhjluDs',
                             title: 'New Order ${item.itemName}',
                             body: 'Price ${item.itemPrice}');
                       });
@@ -316,7 +316,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                                   .bodyMedium!
                                   .copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.red.withOpacity(0.9)),
+                                      color: AppColors.primaryColor.withOpacity(0.9)),
                             )
                           ],
                         ),
@@ -368,7 +368,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                                   .bodyMedium!
                                   .copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.accentColor),
+                                      color: AppColors.primaryColor),
                             )
                           ],
                         ),

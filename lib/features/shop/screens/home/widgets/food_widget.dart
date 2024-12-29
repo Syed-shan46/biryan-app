@@ -87,6 +87,20 @@ class FoodWidget extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Positioned(
+                    top: 40.h,
+                    left: 10.w,
+                    child: product.isAvailable
+                        ? const SizedBox()
+                        : Container(
+                          padding: EdgeInsets.all(4),
+                            decoration: const BoxDecoration(color: Colors.red),
+                            child: const Text(
+                              'Currently Not Available',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                  )
                 ],
               ),
               // Details Section

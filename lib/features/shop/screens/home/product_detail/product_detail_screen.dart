@@ -408,32 +408,45 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
           SizedBox(
             width: 145.w,
             height: 37.h,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  foregroundColor: Colors.white.withOpacity(0.9),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r))),
-              onPressed: ()  {
-                
+            child: widget.product.isAvailable
+                ? ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor,
+                        foregroundColor: Colors.white.withOpacity(0.9),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r))),
+                    onPressed: () {
+                      try {
+                        cartPvr.addItemToCart(
+                          itemName: widget.product.itemName,
+                          itemPrice: widget.product.itemPrice,
+                          category: widget.product.category,
+                          image: widget.product.images,
+                          quantity: currentQuantity,
+                          itemId: widget.product.id,
+                        );
 
-                try {
-                  cartPvr.addItemToCart(
-                    itemName: widget.product.itemName,
-                    itemPrice: widget.product.itemPrice,
-                    category: widget.product.category,
-                    image: widget.product.images,
-                    quantity: currentQuantity,
-                    itemId: widget.product.id,
-                  );
-                  
-
-                  Get.to(() => const CartScreen(showBackArrow: true,));
-                } finally {}
-              },
-              child:
-                  isAdded ? const Text('View cart') : const Text('Add to Cart'),
-            ),
+                        Get.to(() => const CartScreen(
+                              showBackArrow: true,
+                            ));
+                      } finally {}
+                    },
+                    child: const Text('Add to cart'),
+                  )
+                : SizedBox(
+                    width: 145.w,
+                    height: 37.h,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red.withOpacity(0.9),
+                          foregroundColor: Colors.white.withOpacity(0.9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                        ),
+                        onPressed: () {},
+                        child: const Text('Not available')),
+                  ),
           ),
           const SizedBox(width: 20),
         ],

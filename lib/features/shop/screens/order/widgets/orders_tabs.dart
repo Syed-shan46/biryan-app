@@ -21,10 +21,10 @@ class OrdersTabs extends StatelessWidget {
         dividerColor: Colors.transparent,
         indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(25.r),
-            color: AppColors.accentColor.withOpacity(0.9)),
+            color: AppColors.primaryColor.withOpacity(0.9)),
         labelColor: Colors.white,
         labelStyle: appStyle(12, Colors.white, FontWeight.normal),
-        unselectedLabelColor: AppColors.accentColor.withOpacity(0.6),
+        unselectedLabelColor: AppColors.primaryColor.withOpacity(0.6),
         tabAlignment: TabAlignment.start,
         tabs: List.generate(
             orderList.length, (i) => TabWidget(text: orderList[i])));
