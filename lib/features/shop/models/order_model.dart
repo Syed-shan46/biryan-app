@@ -1,14 +1,15 @@
-import 'dart:convert';
+import 'dart:convert';  
 
 class Order {
   final String userId;
   final String name;
   final String phone;
   final String address;
-  final String productName;
-  final int quantity; // Changed to int
-  final String category;
-  final String image;
+  final List<String> productName;
+  final List<int> quantity; // Changed to int
+  final List<String> category;
+  final List<int> itemPrice; // Changed to int
+  final List<String> image;
   final int totalAmount; // Changed to int
   final String paymentStatus;
   final String orderStatus;
@@ -22,6 +23,7 @@ class Order {
       required this.address,
       required this.productName,
       required this.quantity,
+      required this.itemPrice,
       required this.category,
       required this.image,
       required this.totalAmount,
@@ -37,6 +39,7 @@ class Order {
       'phone': phone,
       'address': address,
       'productName': productName,
+      'itemPrice': itemPrice,
       'quantity': quantity,
       'category': category,
       'image': image,
@@ -56,13 +59,11 @@ class Order {
       name: map['userName'] as String? ?? '',
       phone: map['phone']?.toString() ?? '', // Convert phone to String
       address: map['address'] as String? ?? '',
-      productName: map['productName'] as String? ?? '',
-      quantity: map['quantity'] is int
-          ? map['quantity'] as int
-          : int.tryParse(map['quantity'].toString()) ??
-              0, // Handle int and String
-      category: map['category'] as String? ?? '',
-      image: map['image'] as String? ?? '',
+      productName: List<String>.from(map['productName'] ?? []),
+      itemPrice: List<int>.from(map['itemPrice'] ?? []), // Changed to int
+      quantity: List<int>.from(map['quantity'] ?? []),
+      category: List<String>.from(map['category'] ?? []),
+      image: List<String>.from(map['image'] ?? []),
       totalAmount: map['totalAmount'] is int
           ? map['totalAmount'] as int
           : int.tryParse(map['totalAmount'].toString()) ??

@@ -116,7 +116,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
                                                     .withOpacity(0.1),
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
-                                            child: Image.network(order.image)),
+                                            child: Image.network(order.image[0])),
 
                                         const SizedBox(
                                             width: MySizes.spaceBtwItems),
@@ -154,7 +154,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
                                                                 horizontal: 8,
                                                                 vertical: 0),
                                                         child: Text(
-                                                            order.category),
+                                                            order.category[0]),
                                                       )
                                                     ],
                                                   ),
@@ -179,7 +179,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
                                               Align(
                                                   alignment: Alignment.topLeft,
                                                   child: Text(
-                                                    order.productName,
+                                                    order.productName[0],
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .labelMedium,

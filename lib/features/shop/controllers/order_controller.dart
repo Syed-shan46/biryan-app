@@ -11,10 +11,11 @@ class OrderController {
     required final String name,
     required final String phone,
     required final String address,
-    required final String productName,
-    required final int quantity,
-    required final String category,
-    required final String image,
+    required final List<String> productName,
+    required final List<int> quantity,
+    required final List<int> itemPrice,
+    required final List<String> category,
+    required final List<String> image,
     required final int totalAmount,
     required final String paymentStatus,
     required final String orderStatus,
@@ -26,11 +27,12 @@ class OrderController {
       String deviceToken = await customerDeviceToken;
       final Order order = Order(
         userId: id,
-        phone: phone, 
+        phone: phone,
         address: address,
         name: name,
         productName: productName,
         quantity: quantity,
+        itemPrice: itemPrice,
         category: category,
         image: image,
         totalAmount: totalAmount,
@@ -51,7 +53,11 @@ class OrderController {
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
-      Get.to(() => const SuccessScreen());
+      if (response.statusCode == 201) {
+        Get.to(() => const SuccessScreen());
+      } else {
+        Get.snackbar('Error', 'Failed to create order');
+      }
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }

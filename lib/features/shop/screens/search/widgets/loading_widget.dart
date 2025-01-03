@@ -35,7 +35,7 @@ class _LoadingWidgetState extends State<LoadingWidget> with SingleTickerProvider
   Widget build(BuildContext context) {
     return SizedBox(
       width: 375.w,
-      height: 725.h,
+      height: 400.h,
       child: Stack(
         children: [
           // Lottie animation wrapped in SlideTransition
@@ -44,7 +44,7 @@ class _LoadingWidgetState extends State<LoadingWidget> with SingleTickerProvider
             child: LottieBuilder.asset(
               "assets/images/delivery4.json",
               width: 375.w,
-              height: 400,
+              height: 400.h,
               repeat: false,
               onLoaded: (composition) {
                 // Start sliding out after Lottie animation completes

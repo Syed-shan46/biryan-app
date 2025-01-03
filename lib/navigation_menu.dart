@@ -31,7 +31,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
             child: GNav(
               activeColor: AppColors.primaryColor.withOpacity(0.8),
               tabActiveBorder: Border.all(color: AppColors.primaryColor),
-              padding:  EdgeInsets.all(6.h),
+              padding: EdgeInsets.all(6.h),
               selectedIndex: controller.selectedIndex.value,
               onTabChange: controller.changeTabIndex, // Use the method
               gap: 8,
@@ -62,7 +62,7 @@ class NavigationController extends GetxController {
 
   final screens = [
     const HomeScreen(),
-    const SearchScreen(),
+    SearchScreen(),
     const CartScreen(),
     const ProfileScreen(),
   ];

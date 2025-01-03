@@ -9,7 +9,7 @@ class UserProvider extends StateNotifier<User?> {
   void setUser(String userJson) {
     state = User.fromJson(userJson);
     // print('User state updated: ${state?.phone}');
-  }
+  } 
 
   void signOut() {
     state = null;

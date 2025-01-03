@@ -47,25 +47,23 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
   }
 
   void showFullCartData() {
-  final fullCart = widget.cartData.values.toList(); // Access the cart values
-  final fullCartDetails = fullCart.map((cartItem) {
-    return {
-      'itemName': cartItem.itemName,
-      'itemPrice': cartItem.itemPrice,
-      'quantity': cartItem.quantity,
-      'additionalItems': cartItem.additionalItems.map((item) => {
-        'addItemName': item.addItemName,
-        'addItemPrice': item.addItemPrice,
-      }).toList(),
-    };
-  }).toList();
+    final fullCart = widget.cartData.values.toList(); // Access the cart values
+    final fullCartDetails = fullCart.map((cartItem) {
+      return {
+        'itemName': cartItem.itemName,
+        'itemPrice': cartItem.itemPrice,
+        'quantity': cartItem.quantity,
+        'additionalItems': cartItem.additionalItems
+            .map((item) => {
+                  'addItemName': item.addItemName,
+                  'addItemPrice': item.addItemPrice,
+                })
+            .toList(),
+      };
+    }).toList();
 
-  Get.snackbar('Additional', '$fullCartDetails');
-
-  
-}
-
-
+    Get.snackbar('Additional', '$fullCartDetails');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,210 +113,11 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                               // Customize Button
                               InkWell(
                                 onTap: () {
-                                  print('triggered');
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return StatefulBuilder(builder:
-                                            (BuildContext context,
-                                                StateSetter setModalState) {
-                                          return Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Expanded(
-                                                child: SingleChildScrollView(
-                                                  child: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    decoration:
-                                                        const BoxDecoration(),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.all(9.h),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          SizedBox(
-                                                              height: 10.h),
-                                                          // Cart Item Title and Price
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Row(
-                                                                children: [
-                                                                  Text(
-                                                                    cartItem
-                                                                        .itemName,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      width:
-                                                                          10),
-                                                                  Text(
-                                                                    '₹${cartItem.itemPrice}', // Price
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Row(children: [
-                                                                GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      padding:
-                                                                          const EdgeInsets
-                                                                              .all(
-                                                                              4),
-                                                                      decoration:
-                                                                          getDynamicBoxDecoration(
-                                                                              context),
-                                                                      child: const Icon(
-                                                                          Icons
-                                                                              .close),
-                                                                    ))
-                                                              ])
-                                                            ],
-                                                          ),
-                                                          const SizedBox(height: 5),
-                                                          const Divider(
-                                                            thickness: 0.3,
-                                                            color: Colors.grey,
-                                                          ),
-                                                          const SizedBox(
-                                                              height: MySizes
-                                                                  .spaceBtwItems),
-
-                                                          // Displaying Additional Items Dynamically
-                                                          Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(10),
-                                                            decoration:
-                                                                getDynamicBoxDecoration(
-                                                                    context),
-                                                            child: Column(
-                                                              children: items
-                                                                  .map((item) {
-                                                                bool
-                                                                    isSelected =
-                                                                    selectedItems
-                                                                        .contains(
-                                                                            item);
-                                                                return StatefulBuilder(
-                                                                  builder: (BuildContext
-                                                                          context,
-                                                                      StateSetter
-                                                                          setState) {
-                                                                    return Row(
-                                                                      children: [
-                                                                        Image
-                                                                            .asset(
-                                                                          'assets/icons/select.png',
-                                                                          width:
-                                                                              20.w,
-                                                                        ),
-                                                                        const SizedBox(
-                                                                            width:
-                                                                                5),
-                                                                        Text(
-                                                                          item.addItemName,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.w600,
-                                                                          ),
-                                                                        ),
-                                                                        const Spacer(),
-                                                                        Text(
-                                                                          '+ ${item.addItemPrice}',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.w600,
-                                                                          ),
-                                                                        ),
-                                                                        Checkbox(
-                                                                            side:
-                                                                                BorderSide(
-                                                                              color: ThemeUtils.dynamicTextColor(context),
-                                                                            ),
-                                                                            value:
-                                                                                selectedItems.contains(item),
-                                                                            activeColor: AppColors.accentColor,
-                                                                            onChanged: (bool? value) {
-                                                                              setState(() {
-                                                                                if (value!) {
-                                                                                  selectedItems.add(item);
-                                                                                  ref.read(selectedItemsProvider.notifier).addItem(item);
-                                                                                } else {
-                                                                                  selectedItems.remove(item);
-                                                                                  
-                                                                                }
-                                                                              });
-                                                                             
-                                                                            }),
-                                                                      ],
-                                                                    );
-                                                                  },
-                                                                );
-                                                              }).toList(),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              ElevatedButton(
-                                                  onPressed: () {
-                                                ref
-                                                    .read(cartProvider.notifier)
-                                                    .updateAdditionalItems(
-                                                      cartItem.itemId,
-                                                      ref.read(
-                                                          selectedItemsProvider),
-                                                    );
-
-                                                     showFullCartData();
-                                                Navigator.pop(context);
-                                              },
-                                                  child: const Text('Update')),
-                                            ],
-                                          );
-                                        });
-                                      });
+                                  Get.snackbar(' Not Available',
+                                      "Currently not available to request 😊",
+                                      backgroundColor: AppColors.lightBackground
+                                          .withOpacity(0.6),
+                                      icon: const Icon(Icons.message_outlined));
                                 },
                                 child: Row(
                                   children: [

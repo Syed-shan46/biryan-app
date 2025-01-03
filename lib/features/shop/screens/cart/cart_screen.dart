@@ -88,26 +88,9 @@ class _CartScreenState extends ConsumerState<CartScreen>
     return Scaffold(
       /// Appbar
       appBar: AppBar(
-        automaticallyImplyLeading: widget.showBackArrow ? true : false,
-        title: const Text('Cart').animate().slideY(
-              begin: 10, // Start below the screen
-              end: 0, // End at normal position
-              curve: Curves.easeInOut,
-              delay: const Duration(milliseconds: 400),
-              duration: const Duration(milliseconds: 500),
-            ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: const MyCartIcon().animate().slideY(
-                  begin: 10, // Start below the screen
-                  end: 0, // End at normal position
-                  curve: Curves.easeInOut,
-                  // ignore: prefer_const_constructors
-                  delay: Duration(milliseconds: 400),
-                  duration: const Duration(milliseconds: 500),
-                ),
-          )
+        title: Text('Cart'),
+        actions: const [
+          Padding(padding: EdgeInsets.only(right: 15), child: MyCartIcon())
         ],
       ),
 
@@ -117,81 +100,108 @@ class _CartScreenState extends ConsumerState<CartScreen>
           : Padding(
               padding: const EdgeInsets.all(MySizes.defaultSpace),
               child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (user == null) {
-                      showVerificationSheet(context);
-                    } else {
-                      Future.forEach(_cartProvider.getCartItems.entries,
-                          (entry) {
-                        var item = entry.value;
-                        _orderController.createOrders(
-                          name: user.userName,
-                          phone: user.phone,
-                          address: user.userName,
-                          id: user.id,
-                          productName: item.itemName,
-                          quantity: item.quantity,
-                          category: item.category,
-                          image: item.image[0],
-                          totalAmount: totalAmount - welcomeOffer,
-                          paymentStatus: 'Success',
-                          orderStatus: 'Processing',
-                          delivered: false,
-                          customerDeviceToken: getCustomerDeviceToken(),
-                          context: context,
-                        );
-                      });
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (user == null) {
+                        showVerificationSheet(context);
+                      } else {
+                        try {
+                          // Aggregate cart item details into lists
+                          List<String> productNames = [];
+                          List<int> quantities = [];
+                          List<String> categories = [];
+                          List<String> images = [];
+                          List<int> itemPrices = [];
 
-                      Get.to(() => const SuccessScreen());
+                          _cartProvider.getCartItems.entries.forEach((entry) {
+                            var item = entry.value;
+                            productNames.add(item.itemName);
+                            quantities.add(item.quantity);
+                            categories.add(item.category);
+                            itemPrices.add(item.itemPrice);
+                            images.add(item.image.isNotEmpty
+                                ? item.image[0]
+                                : 'defaultImage');
+                          });
 
-                      await Future.forEach(_cartProvider.getCartItems.entries,
-                          (entry) {
-                        var item = entry.value;
-                        FirebaseFirestore.instance
-                            .collection('notifications')
-                            .doc(frUser!.uid)
-                            .collection('notifications')
-                            .doc()
-                            .set({
-                          'title': "Order Successfully Placed ${item.itemName}"
+                          // Create a single order
+                          await _orderController.createOrders(
+                            name: user.userName,
+                            phone: user.phone,
+                            address: user.userName,
+                            id: user.id,
+                            productName: productNames,
+                            quantity: quantities,
+                            itemPrice: itemPrices,
+                            category: categories,
+                            image: images,
+                            totalAmount: totalAmount - welcomeOffer,
+                            paymentStatus: 'Success',
+                            orderStatus: 'Processing',
+                            delivered: false,
+                            customerDeviceToken: getCustomerDeviceToken(),
+                            context: context,
+                          );
+
+                          // Save notification for the order
+                          await FirebaseFirestore.instance
+                              .collection('notifications')
+                              .doc(frUser!.uid)
+                              .collection('notifications')
+                              .add({
+                            'title': "Order Successfully Placed",
+                            'products': productNames,
+                          });
+
+                          // Send notification to admin
+                          SendNotificationService.sendNotificationUsingApi(
+                            token: 'your-notification-token',
+                            title: 'New Order',
+                            body: 'New Order Received',
+                          );
+                        } catch (error) {
+                          print("Error processing order: $error");
+                        }
+
+                        Get.to(() => const SuccessScreen());
+
+                        await Future.forEach(_cartProvider.getCartItems.entries,
+                            (entry) {
+                          var item = entry.value;
+                          FirebaseFirestore.instance
+                              .collection('notifications')
+                              .doc(frUser!.uid)
+                              .collection('notifications')
+                              .doc()
+                              .set({
+                            'title':
+                                "Order Successfully Placed ${item.itemName}"
+                          });
                         });
-                      });
 
-                      await Future.forEach(_cartProvider.getCartItems.entries,
-                          (entry) {
-                        var item = entry.value;
                         SendNotificationService.sendNotificationUsingApi(
                             token:
-                                'eCa1TFIRRjOFp86ZIlk2z-:APA91bE_9RwIWkKi0a59f3LH1vsL-fOPqf9enq0eNZItRMbzn3y8tgODqFzlsPgDLQSi4IFEAI5nBkfNh67weJM8mAEJJ2zVsWda-pVzHbMaQHdcFhjluDs',
-                            title: 'New Order ${item.itemName}',
-                            body: 'Price ${item.itemPrice}');
-                      });
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25),
+                                'dshbJdhqTIieSilsSYtECr:APA91bFqHrL9yc2SFOFCBZ6HaXHhMqlpQxXIyoGYk9HZt2C8HhHuXX95kZAbt1vwvQZPlSBQ4wQwkxBHFJ_R1m7s3fkfraE5K0dvmtx3VhKvaa8IVC2q5As',
+                            title: 'New Order ',
+                            body: 'New Order Recieved');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(25),
+                        ),
                       ),
                     ),
-                  ),
-                  child: Text(
-                    'Place Order ₹${totalAmount - welcomeOffer}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: ThemeUtils.sameBrightness(context)),
-                  ),
-                ).animate().slideY(
-                      begin: 10, // Start below the screen
-                      end: 0, // End at normal position
-                      curve: Curves.easeInOut,
-                      delay: const Duration(milliseconds: 400),
-                      duration: const Duration(milliseconds: 500),
+                    child: Text(
+                      'Place Order ₹${totalAmount - welcomeOffer}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: ThemeUtils.sameBrightness(context)),
                     ),
-              ),
+                  )),
             ),
 
       // Heading and cart items
@@ -201,7 +211,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Lottie.network(
-                    'https://lottie.host/e5c80fca-fe94-4bed-9424-e0d70204d1aa/lhGyjYqBYY.json',
+                    'https://lottie.host/ed1474e2-1435-47b2-81f5-b0074cb72b13/XdQQTi3uQE.json',
                     width: 350,
                     height: 350,
                     fit: BoxFit.fill,
@@ -229,7 +239,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
 
                   // Cart items card
                   Padding(
-                    padding: EdgeInsets.all(MySizes.spaceBtwItems),
+                    padding: const EdgeInsets.all(MySizes.spaceBtwItems),
                     child: CartItemCard(
                       showQuantity: false,
                       showButtons: true,
@@ -316,7 +326,8 @@ class _CartScreenState extends ConsumerState<CartScreen>
                                   .bodyMedium!
                                   .copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.primaryColor.withOpacity(0.9)),
+                                      color: AppColors.primaryColor
+                                          .withOpacity(0.9)),
                             )
                           ],
                         ),
@@ -377,7 +388,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                           begin: 0.3, // Start below the screen
                           end: 0, // End at normal position
                           curve: Curves.easeInOut,
-                          delay: Duration(milliseconds: 200),
+                          delay: const Duration(milliseconds: 200),
                           duration: const Duration(milliseconds: 500),
                         ),
                   )

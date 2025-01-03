@@ -7,6 +7,7 @@ import 'package:biriyani/features/shop/models/additional_model.dart';
 import 'package:biriyani/features/shop/screens/cart/cart_screen.dart';
 import 'package:biriyani/provider/additional_provider.dart';
 import 'package:biriyani/provider/cart_provider.dart';
+import 'package:biriyani/provider/wishlist_provider.dart';
 import 'package:biriyani/utils/constants/global_variables.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -38,6 +39,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.product});
@@ -65,6 +67,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       });
       print("BottomNavigationBar is now visible");
     });
+  }
+
+  void _shareContent() {
+    const String shareText = 'check out this amazing product';
+    Share.share(
+      shareText,
+      subject: 'Product Details',
+    );
   }
 
   @override
@@ -115,7 +125,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     ThemeUtils.dynamicTextColor(context),
                                     FontWeight.w600),
                               ),
-                              const Icon(Icons.share),
+                              IconButton(
+                                onPressed: () {
+                                  _shareContent();
+                                },
+                                icon: const Icon(Icons.share),
+                                color: Colors.red,
+                              )
                             ],
                           ),
 
@@ -150,12 +166,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         duration: playDuration - 100.ms,
                         curve: Curves.decelerate),
 
-                    const FoodList().animate().scaleXY(
-                        begin: 0,
-                        end: 1,
-                        delay: 300.ms,
-                        duration: playDuration - 100.ms,
-                        curve: Curves.decelerate)
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(
+                            () => ProductDetailScreen(product: widget.product));
+                      },
+                      child: const FoodList().animate().scaleXY(
+                          begin: 0,
+                          end: 1,
+                          delay: 300.ms,
+                          duration: playDuration - 100.ms,
+                          curve: Curves.decelerate),
+                    )
                   ],
                 ),
               ),
@@ -269,31 +291,13 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
 
   // Define the fetchItems function
 
-  Future<List<Item>> fetchItems() async {
-    final ItemController itemController =
-        ItemController(); // Your controller class
-    try {
-      // Fetch items from your controller
-      final items = await itemController.fetchItems();
-      // Update the state using the provider
-      ref.read(selectedItemsProvider.notifier).setItems(items);
-      return items; // Return the fetched items
-    } catch (e) {
-      print('Error fetching items: $e');
-      return []; // Return an empty list in case of error
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    fetchItems();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final items = ref.watch(selectedItemsProvider);
     final cartPvr = ref.read(cartProvider.notifier);
     final cartState = ref.watch(cartProvider); // Watch for cart state changes
 
@@ -478,7 +482,7 @@ class CheckoutButton extends StatelessWidget {
   }
 }
 
-class ProductDetailImages extends StatefulWidget {
+class ProductDetailImages extends ConsumerStatefulWidget {
   final Duration playDuration;
   final List<String> images;
   const ProductDetailImages({
@@ -491,12 +495,41 @@ class ProductDetailImages extends StatefulWidget {
   final Product? product;
 
   @override
-  State<ProductDetailImages> createState() => _ProductDetailImagesState();
+  ConsumerState<ProductDetailImages> createState() =>
+      _ProductDetailImagesState();
 }
 
-class _ProductDetailImagesState extends State<ProductDetailImages> {
+class _ProductDetailImagesState extends ConsumerState<ProductDetailImages> {
+  bool isFavorited = false;
+  @override
+  void initState() {
+    super.initState();
+    // Check if the product is already in the cart and set isAdded accordingly
+
+    final favState = ref.read(favoriteProvider);
+
+    if (favState.containsKey(widget.product?.id)) {
+      setState(() {
+        isFavorited = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final favoriteProviderData = ref.read(favoriteProvider.notifier);
+    final faveState = ref.watch(favoriteProvider);
+
+    if (faveState.containsKey(widget.product?.id)) {
+      setState(() {
+        isFavorited = true;
+      });
+    } else {
+      setState(() {
+        isFavorited = false;
+      });
+    }
+
     return MyCurvedWidget(
       child: Container(
         color: Colors.grey.withOpacity(0.2),
@@ -535,14 +568,33 @@ class _ProductDetailImagesState extends State<ProductDetailImages> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withOpacity(0.2),
                         shape: BoxShape.circle),
                     child: InkWell(
                       highlightColor: Colors.transparent,
-                      onTap: () {},
+                      onTap: () {
+                        setState(() {
+                          isFavorited = !isFavorited;
+                        });
+                        if (isFavorited) {
+                          favoriteProviderData.addProductToFavorite(
+                            itemName: widget.product!.itemName,
+                            itemPrice: widget.product!.itemPrice,
+                            quantity: widget.product!.quantity,
+                            category: widget.product!.category,
+                            image: widget.product!.images,
+                            productId: widget.product!.id,
+                          );
+                        } else {
+                          favoriteProviderData
+                              .removeFavItem(widget.product!.id);
+                        }
+                      },
                       child: Icon(
-                        Iconsax.heart,
-                        color: ThemeUtils.dynamicTextColor(context),
+                        isFavorited ? Iconsax.heart5 : Iconsax.heart,
+                        color: isFavorited
+                            ? Colors.red
+                            : ThemeUtils.dynamicTextColor(context),
                       ),
                     ),
                   )

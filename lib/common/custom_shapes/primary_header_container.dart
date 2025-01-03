@@ -1,3 +1,4 @@
+import 'package:biriyani/common/appbar/custom_appbar.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
@@ -25,12 +26,14 @@ class MyPrimaryHeaderContainer extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: MySizes.spaceBtwItems),
         width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(color: AppColors.primaryColor),
+        decoration: BoxDecoration(
+          color:isDarkMode? Colors.grey.withOpacity(0.2) : Colors.black.withOpacity(0.8),
+        ),
         child: Stack(
           children: [
             showContainer
                 ? Positioned(
-                    top: -70,
+                    top: -90,
                     right: -70,
                     child: MyCircularContainer(
                       width: 205,

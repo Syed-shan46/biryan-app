@@ -1,6 +1,7 @@
 import 'package:biriyani/features/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:biriyani/firebase_options.dart';
 import 'package:biriyani/navigation_menu.dart';
+import 'package:biriyani/provider/theme_notifier.dart';
 import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/utils/themes/dark_theme.dart';
 import 'package:biriyani/utils/themes/light_theme.dart';
@@ -54,13 +55,12 @@ class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final currentTheme = ref.watch(themeProvider); // Watch the current theme
     // Ensure the app initializes properly
     return ScreenUtilInit(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.system,
-        theme: lightTheme,
-        darkTheme: darkTheme,
+        theme: currentTheme,
         home: FutureBuilder(
             future: _checkTokenAndSetUser(ref),
             builder: (context, snapshot) {

@@ -5,7 +5,6 @@ import 'package:biriyani/features/shop/screens/home/widgets/category_list.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/home_header.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/food_list.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/my_dot_navigation.dart';
-import 'package:biriyani/services/fcm_service.dart';
 import 'package:biriyani/services/get_service_key.dart';
 import 'package:biriyani/services/notification_service.dart';
 import 'package:biriyani/utils/animation/page_transition.dart';
@@ -31,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     notificationService.getDeviceToken();
     notificationService.firebaseInit(context);
     notificationService.setupInteractMessage(context);
+    
     getServiceToken();
   }
   Future<void> getServiceToken() async {
@@ -70,8 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const FoodList(),
               const Heading(title: 'Trending Now'),
               const FoodList(),
-              const Heading(title: 'Top Picks for you'),
-              const FoodList(),
+             
             ],
           ),
         ),

@@ -1,17 +1,11 @@
 import 'package:biriyani/common/app_style.dart';
 import 'package:biriyani/common/back_ground_container.dart';
 import 'package:biriyani/common/reusable_text.dart';
-import 'package:biriyani/features/shop/screens/order/cancelled.dart';
 import 'package:biriyani/features/shop/screens/order/delivered.dart';
-import 'package:biriyani/features/shop/screens/order/delivering.dart';
-import 'package:biriyani/features/shop/screens/order/pending.dart';
-import 'package:biriyani/features/shop/screens/order/preparing.dart';
-import 'package:biriyani/features/shop/screens/order/widgets/orders_tabs.dart';
 import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserOrders extends StatefulWidget {
   const UserOrders({super.key});
@@ -21,8 +15,7 @@ class UserOrders extends StatefulWidget {
 }
 
 class _UserOrdersState extends State<UserOrders> with TickerProviderStateMixin {
-  late final TabController _tabController =
-      TabController(length: orderList.length, vsync: this);
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +25,18 @@ class _UserOrdersState extends State<UserOrders> with TickerProviderStateMixin {
         elevation: 0,
         title: ReusableText(
             text: "My Orders",
-            style: appStyle(16, AppColors.primaryColor, FontWeight.w600)),
+            style: appStyle(16, ThemeUtils.dynamicTextColor(context), FontWeight.w600)),
       ),
       body: BackGroundContainer(
         color: ThemeUtils.sameBrightness(context),
         child: Column(
           children: [
-            
+          
             
             SizedBox(
               height: height * 0.7,
               width: width,
-              child: DeliveredScreen(),
+              child: const DeliveredScreen(),
             )
           ],
         ),

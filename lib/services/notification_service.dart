@@ -99,7 +99,7 @@ class NotificationService {
       importance: Importance.high,
       showBadge: true,
       playSound: true,
-      sound: const RawResourceAndroidNotificationSound('ring'),
+      sound: const RawResourceAndroidNotificationSound('coin_drop'),
     );
 
     // Android settings
@@ -111,7 +111,7 @@ class NotificationService {
             importance: Importance.max,
             priority: Priority.max,
             playSound: true,
-            sound: const RawResourceAndroidNotificationSound('ring'));
+            sound: const RawResourceAndroidNotificationSound('coin_drop'));
 
     // IOS Settings
     DarwinNotificationDetails darwinNotificationDetails =

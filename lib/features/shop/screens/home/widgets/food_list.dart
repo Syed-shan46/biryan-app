@@ -49,6 +49,7 @@ class _FoodListState extends ConsumerState<FoodList> {
           return FoodWidget(
             product: product,
             onTap: () {
+              print('Navigating to product detail screen');
               Get.to(() => ProductDetailScreen(product: product));
             },
           );

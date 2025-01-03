@@ -1,4 +1,4 @@
-import 'package:biriyani/utils/constants/constants.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,19 +13,22 @@ class BackGroundContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height, // Ensure it takes the full screen height
       decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.r),
-            topRight: Radius.circular(20.r),
+        color: color,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.r),
+          topRight: Radius.circular(20.r),
+        ),
+        image: const DecorationImage(
+          image: AssetImage(
+            "assets/images/restaurant_bk.png",
           ),
-          image: const DecorationImage(
-            image: AssetImage(
-              "assets/images/restaurant_bk.png",
-            ),
-            fit: BoxFit.cover,
-            opacity: .7,
-          )),
+          fit: BoxFit.cover,
+          opacity: .7,
+          alignment: Alignment.bottomCenter, // Position the image at the bottom
+        ),
+      ),
       child: SingleChildScrollView(
         child: child,
       ),
