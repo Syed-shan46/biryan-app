@@ -1,7 +1,8 @@
 import 'package:biriyani/features/authentication/controllers/auth_controller.dart';
-import 'package:biriyani/features/authentication/controllers/username_controller.dart';
 import 'package:biriyani/features/authentication/screens/login/user_name_screen.dart';
+import 'package:biriyani/features/shop/screens/home/home_screen.dart';
 import 'package:biriyani/navigation_menu.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,22 +78,12 @@ class _PhoneVerificationPageState extends ConsumerState<PhoneVerificationPage> {
               FirebaseAuth.instance.currentUser?.phoneNumber ?? '';
 
           if (phoneNumber.isNotEmpty) {
-            bool usernameExists =
-                await UsernameController.checkUsername(phoneNumber);
-            print('Username exists: $usernameExists'); // Debugging line
-            if (usernameExists) {
-              print(
-                  'User already has a username. Proceeding to the main menu.');
-              Get.offAll(() =>
-                  const NavigationMenu()); // Replace with your actual screen
-            } else {
-              print(
-                  'No username found. Redirecting to the username creation screen.');
-              Get.offAll(() => UsernamePage(phone: phoneNumber));
-            }
             // Check or create user in the database
             await authController.handleUserCheck(phoneNumber, ref);
           }
+
+          // Navigate to the main menu
+          Get.offAll(() => UsernamePage(phone: phoneNumber,));
         } catch (e) {
           print('OTP verification failed: $e');
         }

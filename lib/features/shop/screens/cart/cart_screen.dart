@@ -1,6 +1,5 @@
 import 'package:biriyani/common/cart/cart_icon.dart';
 import 'package:biriyani/common/cart/cart_item_card.dart';
-import 'package:biriyani/features/authentication/screens/login/login.dart';
 import 'package:biriyani/features/authentication/screens/login/phone_verification_page.dart';
 import 'package:biriyani/features/shop/controllers/get_customer_device_token.dart';
 import 'package:biriyani/features/shop/controllers/order_controller.dart';
@@ -8,6 +7,7 @@ import 'package:biriyani/features/shop/models/cart_model.dart';
 import 'package:biriyani/features/shop/screens/order/success_screen.dart';
 import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/provider/cart_provider.dart';
+import 'package:biriyani/provider/product_provider.dart';
 import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/services/get_service_key.dart';
 import 'package:biriyani/services/notification_service.dart';
@@ -26,7 +26,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:phone_otp_verification/phone_verification.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key, this.showBackArrow = false});
@@ -56,6 +55,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
   void dispose() {
     _controller.dispose();
     super.dispose();
+    final cartState = ref.read(cartProvider);
   }
 
   double getEachTotal(Map<String, Cart> cartData) {
@@ -76,19 +76,21 @@ class _CartScreenState extends ConsumerState<CartScreen>
 
   @override
   Widget build(BuildContext context) {
+    bool isAdded = false;
     final welcomeOffer = 50;
     final cartData = ref.watch(cartProvider);
     final totalAmount = getTotalAmount(cartData);
     final _cartProvider = ref.watch(cartProvider.notifier);
-    final _cartNotifier = ref.read(cartProvider.notifier);
     final user = ref.watch(userProvider);
     final frUser = FirebaseAuth.instance.currentUser;
+    final cartProvide = ref.read(cartProvider.notifier);
+    final cartState = ref.watch(cartProvider); // Watch for cart state changes
 
     final OrderController _orderController = OrderController();
     return Scaffold(
       /// Appbar
       appBar: AppBar(
-        title: Text('Cart'),
+        title: const Text('Cart'),
         actions: const [
           Padding(padding: EdgeInsets.only(right: 15), child: MyCartIcon())
         ],
@@ -164,8 +166,6 @@ class _CartScreenState extends ConsumerState<CartScreen>
                           print("Error processing order: $error");
                         }
 
-                        Get.to(() => const SuccessScreen());
-
                         await Future.forEach(_cartProvider.getCartItems.entries,
                             (entry) {
                           var item = entry.value;
@@ -182,7 +182,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
 
                         SendNotificationService.sendNotificationUsingApi(
                             token:
-                                'dshbJdhqTIieSilsSYtECr:APA91bFqHrL9yc2SFOFCBZ6HaXHhMqlpQxXIyoGYk9HZt2C8HhHuXX95kZAbt1vwvQZPlSBQ4wQwkxBHFJ_R1m7s3fkfraE5K0dvmtx3VhKvaa8IVC2q5As',
+                                'cJtGWwkfAlraxO4V0mzpca:APA91bHh0eBYk3dzk0hbo5zFoG2m9cuyVkoNeIDSXY6UHyp1dD1BfBtU9R2EdaBDliHaxIWuQlnqsNd1cb6-mA1rbD7HMcmq0wtiC3Yu5AnA2wA7zWNwcb0',
                             title: 'New Order ',
                             body: 'New Order Recieved');
                       }
@@ -211,6 +211,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Lottie.network(
+                    repeat: false,
                     'https://lottie.host/ed1474e2-1435-47b2-81f5-b0074cb72b13/XdQQTi3uQE.json',
                     width: 350,
                     height: 350,
@@ -254,6 +255,226 @@ class _CartScreenState extends ConsumerState<CartScreen>
                         duration: const Duration(milliseconds: 500),
                       ),
 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                
+                                context: context,
+                                builder: (BuildContext context) {
+                                  final products = ref.watch(productProvider);
+                                  final cartItems = ref.watch(
+                                      cartProvider); // Watching cart provider
+
+                                  if (products.isEmpty) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 300.h,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10.h),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 10.h),
+                                          const Text(
+                                            'Available Products',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 10.h),
+                                          Expanded(
+                                            child: ListView.builder(
+                                              itemCount: products.length,
+                                              itemBuilder: (context, index) {
+                                                final product = products[index];
+
+                                                // Check if the product is in the cart
+                                                final isInCart =
+                                                    cartItems.values.any(
+                                                  (item) =>
+                                                      item.itemId == product.id,
+                                                );
+
+                                                return ListTile(
+                                                  trailing: IconButton(
+                                                    onPressed: () {
+                                                      if (isInCart) {
+                                                        // Remove item from cart if already present
+                                                        cartProvide
+                                                            .removeCartItem(
+                                                                product.id);
+                                                      } else {
+                                                        // Add item to cart if not present
+                                                        cartProvide
+                                                            .addItemToCart(
+                                                          itemName:
+                                                              product.itemName,
+                                                          itemPrice:
+                                                              product.itemPrice,
+                                                          quantity:
+                                                              product.quantity,
+                                                          category:
+                                                              product.category,
+                                                          image: product.images,
+                                                          itemId: product.id,
+                                                        );
+                                                      }
+                                                    },
+                                                    icon: AnimatedContainer(
+                                                      duration: const Duration(
+                                                          milliseconds:
+                                                              500), // Animation for color change
+                                                      decoration: BoxDecoration(
+                                                        color: isInCart
+                                                            ? AppColors
+                                                                .primaryColor // Color when the item is in the cart
+                                                            : const Color(
+                                                                0xFF2F3645), // Default color
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: SizedBox(
+                                                        width: 30.w,
+                                                        height: 30.h,
+                                                        child: Center(
+                                                          child:
+                                                              AnimatedSwitcher(
+                                                            duration: const Duration(
+                                                                milliseconds:
+                                                                    500), // Icon transition duration
+                                                            transitionBuilder:
+                                                                (child,
+                                                                    animation) {
+                                                              // Smooth icon transition using fade and scale
+                                                              return FadeTransition(
+                                                                opacity:
+                                                                    animation,
+                                                                child:
+                                                                    ScaleTransition(
+                                                                  scale:
+                                                                      animation,
+                                                                  child: child,
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Icon(
+                                                              isInCart
+                                                                  ? Icons.check
+                                                                  : Icons
+                                                                      .add, // Icon changes based on cart state
+                                                              key: ValueKey<
+                                                                      bool>(
+                                                                  isInCart), // Ensures a new widget instance for animation
+                                                              color: isInCart
+                                                                  ? ThemeUtils
+                                                                      .sameBrightness(
+                                                                          context) // Icon color when in cart
+                                                                  : ThemeUtils
+                                                                      .sameBrightness(
+                                                                          context), // Default icon color
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  leading: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    child: Image.network(
+                                                      product.images[0],
+                                                      width: 50,
+                                                      height: 50,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                    product.itemName,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: ThemeUtils
+                                                          .dynamicTextColor(
+                                                              context),
+                                                    ),
+                                                  ),
+                                                  subtitle: Text(
+                                                    '₹${product.itemPrice}',
+                                                    style: TextStyle(
+                                                      color: ThemeUtils
+                                                          .dynamicTextColor(
+                                                              context),
+                                                    ),
+                                                  ),
+                                                  onTap: () {
+                                                    print(
+                                                        'Selected: ${product.itemName}');
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.primaryColor,
+                                  width: 0.5,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Add items',
+                                    style: TextStyle(
+                                      color:
+                                          ThemeUtils.dynamicTextColor(context)
+                                              .withOpacity(0.8),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.add,
+                                    size: 14.sp,
+                                    color: ThemeUtils.dynamicTextColor(context)
+                                        .withOpacity(0.8),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ).animate().slideY(
+                            begin: 0.8, // Start below the screen
+                            end: 0, // End at normal position
+                            curve: Curves.easeInOut,
+                            delay: const Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 500),
+                          ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 5),
+
                   Divider(
                           color: Colors.grey.withOpacity(0.3),
                           indent: 20,
@@ -263,7 +484,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                         begin: -5, // Start below the screen
                         end: 0, // End at normal position
                         curve: Curves.easeInOut,
-                        delay: const Duration(milliseconds: 1000),
+                        delay: const Duration(milliseconds: 700),
                         duration: const Duration(milliseconds: 500),
                       ),
                   const SizedBox(height: MySizes.spaceBtwItems),
@@ -295,7 +516,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                               begin: -5, // Start below the screen
                               end: 0, // End at normal position
                               curve: Curves.easeInOut,
-                              delay: const Duration(milliseconds: 1000),
+                              delay: const Duration(milliseconds: 700),
                               duration: const Duration(milliseconds: 500),
                             ),
                         const SizedBox(height: MySizes.spaceBtwItems / 2),
@@ -357,7 +578,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                               begin: -5, // Start below the screen
                               end: 0, // End at normal position
                               curve: Curves.easeInOut,
-                              delay: const Duration(milliseconds: 1000),
+                              delay: const Duration(milliseconds: 700),
                               duration: const Duration(milliseconds: 500),
                             ),
 
@@ -443,7 +664,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                       (index) {
                         return ListTile(
                           leading: const Icon(Icons.check_circle_outline,
-                              color: AppColors.accentColor),
+                              color: AppColors.primaryColor),
                           title: Text(
                             verificationReasons[index],
                             style: TextStyle(

@@ -1,7 +1,8 @@
-import 'package:biriyani/features/shop/models/additional_model.dart';
+import 'package:biriyani/features/shop/controllers/productController.dart';
 import 'package:biriyani/features/shop/models/cart_model.dart';
-import 'package:biriyani/provider/additional_provider.dart';
 import 'package:biriyani/provider/cart_provider.dart';
+import 'package:biriyani/provider/product_provider.dart';
+import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/helpers/box_decoration_helper.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
@@ -10,7 +11,6 @@ import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 class CartItemCard extends ConsumerStatefulWidget {
   CartItemCard({
@@ -31,45 +31,27 @@ class CartItemCard extends ConsumerStatefulWidget {
 }
 
 class _CartItemCardState extends ConsumerState<CartItemCard> {
-  bool _isExpanded = false;
-  bool _rememberMe = false; // Initial state
-  List<Item> selectedItems = [];
-
-  // Collect selected items
-  void updateSelectedItems(Item item, bool isSelected) {
-    setState(() {
-      if (isSelected) {
-        selectedItems.add(item); // Add item to selected list
-      } else {
-        selectedItems.remove(item); // Remove item from selected list
-      }
-    });
+  Future<void> _fetchProduct() async {
+    final ProductController productController = ProductController();
+    try {
+      final products = await productController.loadProducts();
+      ref.read(productProvider.notifier).setProducts(products);
+    } catch (e) {
+      print('Error $e');
+    }
   }
 
-  void showFullCartData() {
-    final fullCart = widget.cartData.values.toList(); // Access the cart values
-    final fullCartDetails = fullCart.map((cartItem) {
-      return {
-        'itemName': cartItem.itemName,
-        'itemPrice': cartItem.itemPrice,
-        'quantity': cartItem.quantity,
-        'additionalItems': cartItem.additionalItems
-            .map((item) => {
-                  'addItemName': item.addItemName,
-                  'addItemPrice': item.addItemPrice,
-                })
-            .toList(),
-      };
-    }).toList();
-
-    Get.snackbar('Additional', '$fullCartDetails');
+  @override
+  void initState() {
+    super.initState();
+    _fetchProduct();
   }
 
   @override
   Widget build(BuildContext context) {
-    final items = ref.watch(selectedItemsProvider);
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final selectedItems = ref.watch(selectedItemsProvider);
+    final cartProvide = ref.read(cartProvider.notifier);
+    final cartState = ref.watch(cartProvider); // Watch for cart state changes
+
     return ListView.separated(
       shrinkWrap: true,
       separatorBuilder: (_, __) => const Column(
@@ -113,24 +95,22 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                               // Customize Button
                               InkWell(
                                 onTap: () {
-                                  Get.snackbar(' Not Available',
-                                      "Currently not available to request 😊",
-                                      backgroundColor: AppColors.lightBackground
-                                          .withOpacity(0.6),
-                                      icon: const Icon(Icons.message_outlined));
+                                  print('triggered');
+                                  
                                 },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'Request',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ThemeUtils.dynamicTextColor(
-                                                  context)
-                                              .withOpacity(0.8)),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      color: AppColors.primaryColor,
+                                      borderRadius: BorderRadius.all(Radius.circular(2))),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 3, vertical: 1),
+                                  child: Text(
+                                    cartItem.category,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
                                     ),
-                                    const Icon(Icons.arrow_drop_down)
-                                  ],
+                                  ),
                                 ),
                               ),
                             ],

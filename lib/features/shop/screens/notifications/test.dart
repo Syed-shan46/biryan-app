@@ -105,7 +105,19 @@ class _PhoneVerificationPageState extends ConsumerState<PhoneVerificationPage> {
   }
 }
 
-
+// bool usernameExists =
+//                 await UsernameController.checkUsername(phoneNumber);
+//             print('Username exists: $usernameExists'); // Debugging line
+//             if (usernameExists) {
+//               print(
+//                   'User already has a username. Proceeding to the main menu.');
+//               Get.offAll(() =>
+//                   const NavigationMenu()); // Replace with your actual screen
+//             } else {
+//               print(
+//                   'No username found. Redirecting to the username creation screen.');
+//               Get.offAll(() => UsernamePage(phone: phoneNumber));
+//             }
 
 // controller 
 Future<void> handleUserCheck(String phoneNumber, WidgetRef ref) async {

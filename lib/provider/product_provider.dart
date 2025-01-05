@@ -1,3 +1,4 @@
+
 import 'package:biriyani/features/authentication/models/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,6 +20,9 @@ class ProductProvider extends StateNotifier<List<Product>> {
             product.itemName.toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
+
+  // Fetch products by category from API and set the state
+ 
 }
 
 final productProvider =

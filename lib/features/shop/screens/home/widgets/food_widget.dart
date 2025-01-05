@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class FoodWidget extends ConsumerStatefulWidget {
@@ -63,10 +62,15 @@ class _FoodWidgetState extends ConsumerState<FoodWidget> {
     }
     return GestureDetector(
       onTap: () {
-        Get.to(() => ProductDetailScreen(product: widget.product));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(product: widget.product),
+          ),
+        );
       },
       child: Padding(
-        padding: EdgeInsets.only(right: 12.w),
+        padding: EdgeInsets.only(right: 12.w,),
         child: LayoutBuilder(builder: (context, constraints) {
           return Container(
             width: width * .41,
@@ -75,6 +79,7 @@ class _FoodWidgetState extends ConsumerState<FoodWidget> {
               // Use Column instead of ListView
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+               
                 // Image Section
                 Stack(
                   children: [
@@ -83,21 +88,15 @@ class _FoodWidgetState extends ConsumerState<FoodWidget> {
                         topLeft: Radius.circular(12.w),
                         topRight: Radius.circular(12.w),
                       ),
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() =>
-                              ProductDetailScreen(product: widget.product));
-                        },
-                        child: SizedBox(
-                          height: 100.h,
-                          width: width * 0.8,
-                          child: Image.network(
-                            widget.product.images[0],
-                            fit: BoxFit.cover,
-                          ).animate(delay: 400.ms).shimmer(
-                                duration: 1000.ms,
-                              ),
-                        ),
+                      child: SizedBox(
+                        height: 100.h,
+                        width: width * 0.8,
+                        child: Image.network(
+                          widget.product.images[0],
+                          fit: BoxFit.cover,
+                        ).animate(delay: 400.ms).shimmer(
+                              duration: 1000.ms,
+                            ),
                       ),
                     ),
                     Positioned(
@@ -129,8 +128,8 @@ class _FoodWidgetState extends ConsumerState<FoodWidget> {
                                   SnackBar(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 12),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 90, vertical: 20),
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 80.w, vertical: 13.h),
                                     content: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -175,8 +174,8 @@ class _FoodWidgetState extends ConsumerState<FoodWidget> {
                                   SnackBar(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 12),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 90, vertical: 15),
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 70.w, vertical: 13.h),
                                     content: const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,

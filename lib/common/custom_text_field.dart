@@ -14,6 +14,7 @@ class CustomTextWidget extends StatelessWidget {
       this.obscureText,
       this.suffixIcon,
       this.validator,
+      this.onTap,
       this.prefixIcon,
       this.hintText});
 
@@ -21,27 +22,29 @@ class CustomTextWidget extends StatelessWidget {
   final TextEditingController? controller;
   final void Function()? onEditingComplete;
   final void Function(String)? onChanged;
+  final void Function()? onTap;
   final bool? obscureText;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final String? Function(String?)? validator;
   final String? hintText;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(9.r),
       ),
       child: TextFormField(
         onChanged: onChanged,
-        
+        onTap: onTap,
         controller: controller,
         keyboardType: keyboardType,
         onEditingComplete: onEditingComplete,
         obscureText: obscureText ?? false,
         cursorHeight: 20.h,
-        style: appStyle(11, ThemeUtils.dynamicTextColor(context), FontWeight.normal),
+        style: appStyle(
+            11, ThemeUtils.dynamicTextColor(context), FontWeight.normal),
         validator: validator,
         decoration: InputDecoration(
           border: OutlineInputBorder(
@@ -53,7 +56,6 @@ class CustomTextWidget extends StatelessWidget {
             ),
           ),
           enabledBorder: OutlineInputBorder(
-            
             borderRadius: BorderRadius.circular(9.r),
             borderSide: BorderSide(
               color: ThemeUtils.dynamicTextColor(

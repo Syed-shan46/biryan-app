@@ -1,4 +1,6 @@
+import 'package:biriyani/common/curry_and_fry_column.dart';
 import 'package:biriyani/common/heading.dart';
+import 'package:biriyani/common/rice_column.dart';
 import 'package:biriyani/features/shop/controllers/home_controller.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/banner_slider.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/category_list.dart';
@@ -67,9 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const MyBannerSlider(),
               MyDotNavigation(controller: controller, dotCount: 3),
               const Heading(title: 'Popular Items'),
-              const FoodList(),
+              const RiceWidget(),
               const Heading(title: 'Trending Now'),
-              const FoodList(),
+              const CurryAndFry(),
              
             ],
           ),

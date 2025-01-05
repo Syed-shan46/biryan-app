@@ -31,7 +31,8 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
 
   Future<List<Map<String, dynamic>>> _fetchOrders() async {
     final user = ref.read(userProvider);
-    print(user!.id);
+    print(user!.userName);
+
     final String userId = user.id;
 
     try {
@@ -41,8 +42,10 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
       );
 
       if (response.statusCode == 200) {
-        print(response.body);
         final List<dynamic> data = json.decode(response.body);
+        if (data.isEmpty) {
+          print('No orders found for user.');
+        }
         return List<Map<String, dynamic>>.from(data);
       } else {
         throw Exception('Failed to load orders');
@@ -67,8 +70,8 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () { 
-                 Get.to(() => const PhoneVerificationPage());
+              onPressed: () {
+                Get.to(() => const PhoneVerificationPage());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
@@ -83,6 +86,7 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
       );
     }
     return FutureBuilder<List<Map<String, dynamic>>>(
+      // FutureBuilder to handle async data fetching
       future: _fetchOrders(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -93,24 +97,16 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Column(
-            children: [
-              Lottie.asset(
-                'assets/images/no-item.json',
-                width: 350,
-                height: 350,
-                fit: BoxFit.fill,
-              ),
-              const Center(
-                child: Text('No orders found'),
-              ),
-            ],
+          return const Center(
+            child: Text('No orders found'),
           );
         }
 
         // If the user is not logged in
 
         final orders = snapshot.data!;
+
+        // Display orders
         return Column(
           children: [
             const SizedBox(height: 16.0),
@@ -124,6 +120,11 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
                   final order = orders[index];
                   final products = (order['products'] as List<dynamic>? ?? []);
 
+                  // Safe retrieval of Order ID
+                  final orderId = order['_id'] is Map
+                      ? order['_id']['\$oid']
+                      : order['_id'].toString();
+
                   return Container(
                     decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(.1),
@@ -134,9 +135,7 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Order ID: ${order['_id'] is Map ? order['_id']['\$oid'] : order['_id']}',
-                        ),
+                        Text('Order ID: $orderId'),
                         Text('Phone: ${order['phone']}'),
                         Text('Total Amount: ₹${order['totalAmount']}'),
                         Text('Order Status: ${order['orderStatus']}'),

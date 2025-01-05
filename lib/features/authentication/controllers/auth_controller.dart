@@ -77,7 +77,7 @@ class AuthController {
 
       // Show success message
       Get.snackbar('Logout', 'Logout Successfully',
-          icon: Icon(Icons.logout), backgroundColor: AppColors.accentColor);
+          icon: const Icon(Icons.logout));
     } catch (e) {
       // Show error message in case of any issues
       Get.snackbar('Error', 'Error signing out: $e');

@@ -30,7 +30,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Order Recieved',
+                'Order Successfully',
                 style: textTheme.headlineMedium,
               ),
               const SizedBox(height: MySizes.spaceBtwItems),
@@ -38,14 +38,14 @@ class _SuccessScreenState extends State<SuccessScreen> {
                 'https://lottie.host/7468eb62-5726-4522-acad-799587cb5a84/CAPyRQ8Ux2.json',
                 width: 105.h,
                 height: 105.h,
-                repeat: true,
+                repeat: false,
               ),
               const SizedBox(height: MySizes.spaceBtwItems),
               const Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: MySizes.spaceBtwSections),
                 child: Text(
-                  'Thank you for your order, Your items will be with you in the 48 hours',
+                  'Thank you for your order! Our team is preparing your delicious meal, and it will be delivered fresh to your doorstep.',
                   textAlign: TextAlign.center,
                   style: TextStyle(),
                 ),
@@ -59,23 +59,17 @@ class _SuccessScreenState extends State<SuccessScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min, // Shrink to fit the content
           children: [
-            InkWell(
-              onTap: () => Get.to(()=> const ProfileScreen()),
-              child: Container(
-                color: isDarkMode? Colors.grey.withOpacity(0.2): Colors.grey.withOpacity(0.2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                  children:  [ 
-                    const Padding(
-                      padding: EdgeInsets.only(left: MySizes.spaceBtwItems),
-                      child: Text('MY ACCOUNT'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: MySizes.spaceBtwItems),
-                      child: IconButton(onPressed: (){}, icon:  Icon(CupertinoIcons.arrow_right,color: ThemeUtils.dynamicTextColor(context),),iconSize: 20,),
-                    )
-                  ],
-                ),
+            Container(
+              color: isDarkMode? Colors.grey.withOpacity(0.2): Colors.grey.withOpacity(0.2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                children:  [ 
+                 
+                  Padding(
+                    padding: const EdgeInsets.only(right: MySizes.spaceBtwItems),
+                    child: IconButton(onPressed: (){}, icon:  Icon(CupertinoIcons.arrow_right,color: ThemeUtils.dynamicTextColor(context),),iconSize: 20,),
+                  )
+                ],
               ),
             ),
             const SizedBox(height: 2), // Spacing between buttons

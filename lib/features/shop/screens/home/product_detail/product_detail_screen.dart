@@ -166,18 +166,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         duration: playDuration - 100.ms,
                         curve: Curves.decelerate),
 
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(
-                            () => ProductDetailScreen(product: widget.product));
-                      },
-                      child: const FoodList().animate().scaleXY(
-                          begin: 0,
-                          end: 1,
-                          delay: 300.ms,
-                          duration: playDuration - 100.ms,
-                          curve: Curves.decelerate),
-                    )
+                    const FoodList().animate().scaleXY(
+                        begin: 0,
+                        end: 1,
+                        delay: 300.ms,
+                        duration: playDuration - 100.ms,
+                        curve: Curves.decelerate)
                   ],
                 ),
               ),

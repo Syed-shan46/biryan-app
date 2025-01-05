@@ -3,7 +3,6 @@ import 'package:biriyani/common/back_ground_container.dart';
 import 'package:biriyani/common/reusable_text.dart';
 import 'package:biriyani/features/shop/screens/order/delivered.dart';
 import 'package:biriyani/utils/constants/constants.dart';
-import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
 
