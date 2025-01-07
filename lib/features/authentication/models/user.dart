@@ -5,6 +5,7 @@ class User {
   final String phone;
   final String userName;
   final String? userDeviceToken;
+  final bool? hasOrderedBefore;
   // User's phone number
 
   // Constructor
@@ -12,8 +13,25 @@ class User {
     required this.id,
     required this.phone,
     required this.userName,
+    this.hasOrderedBefore,
     this.userDeviceToken,
   });
+
+  User copyWith({
+    String? id,
+    String? phone,
+    String? userName,
+    String? userDeviceToken,
+    bool? hasOrderedBefore,
+  }) {
+    return User(
+      id: id ?? this.id,
+      phone: phone ?? this.phone,
+      userName: userName ?? this.userName,
+      userDeviceToken: userDeviceToken ?? this.userDeviceToken,
+      hasOrderedBefore: hasOrderedBefore ?? this.hasOrderedBefore,
+    );
+  }
 
   // Converts the User object to a Map
   Map<String, dynamic> toMap() {
@@ -22,6 +40,7 @@ class User {
       "phone": phone, // Map the 'phone' field
       "userName": userName,
       'userDeviceToken': userDeviceToken,
+      'hasOrderedBefore': hasOrderedBefore,
     };
   }
 
@@ -36,7 +55,9 @@ class User {
       phone:
           map['phone'] as String? ?? "", // Extract 'phone' field from the map
       userName: map['username'] as String? ?? "",
-      userDeviceToken: map['userDeviceToken'] as String? ?? "", // Extract 'deviceToken' field
+      hasOrderedBefore: map['hasOrderedBefore'] as bool,
+      userDeviceToken: map['userDeviceToken'] as String? ??
+          "", // Extract 'deviceToken' field
     );
   }
 

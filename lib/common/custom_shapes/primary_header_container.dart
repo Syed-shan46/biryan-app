@@ -1,6 +1,4 @@
-import 'package:biriyani/common/appbar/custom_appbar.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
-import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
 

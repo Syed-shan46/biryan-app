@@ -1,13 +1,9 @@
-import 'package:biriyani/features/authentication/models/product.dart';
-import 'package:biriyani/features/shop/controllers/productController.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/food_widget.dart';
 import 'package:biriyani/provider/category_by_product_provider.dart';
-import 'package:biriyani/provider/product_provider.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ProductColumn extends ConsumerWidget {

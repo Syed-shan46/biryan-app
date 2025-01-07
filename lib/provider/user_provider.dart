@@ -8,12 +8,17 @@ class UserProvider extends StateNotifier<User?> {
 
   void setUser(String userJson) {
     state = User.fromJson(userJson);
+    state = user;
     // print('User state updated: ${state?.phone}');
-  } 
+  }
 
   void signOut() {
     state = null;
     print('User signed out');
+  }
+
+  void updateUsername(String username) {
+    state = state?.copyWith(userName: username); // Update only the username
   }
 }
 

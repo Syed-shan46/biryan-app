@@ -59,13 +59,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
     super.initState();
-    print("Timer started for 7 seconds...");
     // Add a delay before showing the BottomNavigationBar
     Timer(const Duration(seconds: 1), () {
       setState(() {
         _showBottomNav = true;
       });
-      print("BottomNavigationBar is now visible");
+      
     });
   }
 

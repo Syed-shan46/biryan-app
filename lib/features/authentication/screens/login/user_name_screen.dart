@@ -1,21 +1,24 @@
 import 'package:biriyani/navigation_menu.dart';
+import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/utils/constants/global_variables.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class UsernamePage extends StatefulWidget {
+class UsernamePage extends ConsumerStatefulWidget {
   final String phone;
 
   const UsernamePage({required this.phone, Key? key}) : super(key: key);
 
   @override
-  _UsernamePageState createState() => _UsernamePageState();
+  ConsumerState createState() => _UsernamePageState();
 }
 
-class _UsernamePageState extends State<UsernamePage> {
+class _UsernamePageState extends ConsumerState<UsernamePage> {
+  
   final TextEditingController _usernameController = TextEditingController();
   bool _isLoading = false;
   String? _errorText;
@@ -64,9 +67,11 @@ class _UsernamePageState extends State<UsernamePage> {
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Username updated successfully')),
-        );
+        ref
+            .read(userProvider.notifier)
+            .updateUsername(username); // Call in your state management logic
+
+        Get.snackbar('Username', "Username updated successfully");
 
         Get.offAll(() => const NavigationMenu());
 

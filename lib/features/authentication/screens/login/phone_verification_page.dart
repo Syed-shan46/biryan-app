@@ -1,7 +1,5 @@
 import 'package:biriyani/features/authentication/controllers/auth_controller.dart';
 import 'package:biriyani/features/authentication/screens/login/user_name_screen.dart';
-import 'package:biriyani/features/shop/screens/home/home_screen.dart';
-import 'package:biriyani/navigation_menu.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

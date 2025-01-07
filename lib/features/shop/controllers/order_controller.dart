@@ -83,4 +83,29 @@ class OrderController {
       throw Exception('Error loading orders: $e');
     }
   }
+
+  Future<bool?> checkHasOrderedBefore(String userId) async {
+    String baseUrl = uri; // Replace with your actual API URL
+    final String endpoint = '/users/$userId/hasOrderedBefore';
+
+    try {
+      final response = await http.get(Uri.parse('$baseUrl$endpoint'));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success']) {
+          return data['hasOrderedBefore'];
+        } else {
+          print('Error: ${data['message']}');
+          return null;
+        }
+      } else {
+        print('Failed to fetch data. Status Code: ${response.statusCode}');
+        return null;
+      }
+    } catch (error) {
+      print('Error calling API: $error');
+      return null;
+    }
+  }
 }

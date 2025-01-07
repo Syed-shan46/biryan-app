@@ -1,8 +1,6 @@
-import 'package:biriyani/common/back_ground_container.dart';
 import 'package:biriyani/common/cart/cart_icon.dart';
 import 'package:biriyani/provider/wishlist_provider.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
-import 'package:biriyani/utils/helpers/box_decoration_helper.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';

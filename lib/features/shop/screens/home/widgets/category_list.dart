@@ -1,4 +1,5 @@
 import 'package:biriyani/common/app_style.dart';
+import 'package:biriyani/common/rice_column.dart';
 import 'package:biriyani/features/shop/controllers/category_controller.dart';
 import 'package:biriyani/features/shop/screens/store/store_screen.dart';
 import 'package:biriyani/provider/category_provider.dart';
@@ -38,6 +39,42 @@ class _CategoryListState extends ConsumerState<CategoryList> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final categories = ref.watch(categoryProvider);
+
+    if (categories.isEmpty) {
+      return Container(
+         padding:
+          EdgeInsets.only(left: 1.w, top: 10.h),
+        height: 80.h, // Adjust the height to match your design
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 6,
+          itemBuilder: (BuildContext context, int i) {
+            return Padding(
+              padding: EdgeInsets.only(right: 15.w),
+              child: Column(
+                children: [
+                  Container(
+                    width: 47.w,
+                    height: 47.w,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.04),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  SizedBox(
+                    width: 50.w,
+                    height: 10.h,
+                    child: const Skelton(),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    }
+
     return Container(
       height: 80.h, // Increased height for better alignment
       padding:

@@ -1,4 +1,3 @@
-import 'package:biriyani/features/shop/screens/profile/profile_screen.dart';
 import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/text_theme.dart';
@@ -59,19 +58,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min, // Shrink to fit the content
           children: [
-            Container(
-              color: isDarkMode? Colors.grey.withOpacity(0.2): Colors.grey.withOpacity(0.2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                children:  [ 
-                 
-                  Padding(
-                    padding: const EdgeInsets.only(right: MySizes.spaceBtwItems),
-                    child: IconButton(onPressed: (){}, icon:  Icon(CupertinoIcons.arrow_right,color: ThemeUtils.dynamicTextColor(context),),iconSize: 20,),
-                  )
-                ],
-              ),
-            ),
+          
             const SizedBox(height: 2), // Spacing between buttons
             InkWell(
               onTap: () => Get.to(()=> const NavigationMenu()),

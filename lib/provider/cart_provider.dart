@@ -63,31 +63,6 @@ class CartNotifier extends StateNotifier<Map<String, Cart>> {
     }
   }
 
-  // Update Additional Items for a Cart Item
-  void updateAdditionalItems(String itemId, List<Item> additionalItems) {
-  if (state.containsKey(itemId)) {
-    final cartItem = state[itemId]!;
-    
-    // Calculate the total additional price
-    final additionalPrice = additionalItems.fold<int>(
-      0,
-      (total, item) => total + item.addItemPrice,
-    );
-
-    // Update the state with the modified cart item
-    state = {
-      ...state,
-      itemId: cartItem.copyWith(
-        additionalItems: additionalItems,
-       
-      ),
-    };
-  }
-}
-
-
-  
-
   void incrementCartItem(String itemId) {
     if (state.containsKey(itemId)) {
       final cartItem = state[itemId]!;
@@ -103,8 +78,6 @@ class CartNotifier extends StateNotifier<Map<String, Cart>> {
   List<Item> getAdditionalItems(String itemId) {
     return state[itemId]?.additionalItems ?? [];
   }
-
-  Map<String, Cart> _cartItems = {};
 
   void decrementCartItem(String itemId) {
     if (state.containsKey(itemId)) {
@@ -150,8 +123,6 @@ class CartNotifier extends StateNotifier<Map<String, Cart>> {
   int getQuantity(String productId) {
     return state[productId]?.quantity ?? 1;
   }
-
-  
 
   // Method to calculate the total quantity
   int get totalQuantity {

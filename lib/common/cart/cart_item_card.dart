@@ -2,18 +2,15 @@ import 'package:biriyani/features/shop/controllers/productController.dart';
 import 'package:biriyani/features/shop/models/cart_model.dart';
 import 'package:biriyani/provider/cart_provider.dart';
 import 'package:biriyani/provider/product_provider.dart';
-import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/helpers/box_decoration_helper.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/text_theme.dart';
-import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartItemCard extends ConsumerStatefulWidget {
-  CartItemCard({
+  const CartItemCard({
     required this.showQuantity,
     required this.showButtons,
     required CartNotifier cartProvider,
@@ -49,8 +46,8 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvide = ref.read(cartProvider.notifier);
-    final cartState = ref.watch(cartProvider); // Watch for cart state changes
+    ref.read(cartProvider.notifier);
+    ref.watch(cartProvider); // Watch for cart state changes
 
     return ListView.separated(
       shrinkWrap: true,

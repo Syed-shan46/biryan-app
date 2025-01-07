@@ -3,8 +3,6 @@ import 'package:biriyani/firebase_options.dart';
 import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/provider/theme_notifier.dart';
 import 'package:biriyani/provider/user_provider.dart';
-import 'package:biriyani/utils/themes/dark_theme.dart';
-import 'package:biriyani/utils/themes/light_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,4 @@
+import 'package:biriyani/utils/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,7 +18,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
   // API call to update the user details (username, email)
   Future<void> editUser(String username, String email) async {
-    final String apiUrl = 'http://10.0.2.2:3000/editUser'; // Replace with your API URL
+     String apiUrl = '$uri/editUser'; // Replace with your API URL
 
     setState(() {
       isLoading = true;
@@ -41,14 +42,14 @@ class _CreateUserPageState extends State<CreateUserPage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Success'),
-            content: Text('User updated successfully!'),
+            title: const Text('Success'),
+            content: const Text('User updated successfully!'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           ),
@@ -94,25 +95,25 @@ class _CreateUserPageState extends State<CreateUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Enter Your Details')),
+      appBar: AppBar(title: const Text('Enter Your Details')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
             ),
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
             if (errorMessage.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   errorMessage,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
               ),
             ElevatedButton(
@@ -129,8 +130,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       await editUser( username, email);
                     },
               child: isLoading
-                  ? CircularProgressIndicator()
-                  : Text('Submit'),
+                  ? const CircularProgressIndicator()
+                  : const Text('Submit'),
             ),
           ],
         ),

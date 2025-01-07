@@ -1,9 +1,7 @@
 // ignore_for_file: unused_field
 
-import 'dart:math';
 
 import 'package:biriyani/common/app_style.dart';
-import 'package:biriyani/common/custom_container.dart';
 import 'package:biriyani/common/custom_text_field.dart';
 import 'package:biriyani/features/shop/screens/home/product_detail/product_detail_screen.dart';
 import 'package:biriyani/features/shop/screens/search/widgets/loading_widget.dart';
@@ -13,7 +11,6 @@ import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 
 final searchQueryProvider = StateProvider<String>((ref) => '');
@@ -44,7 +41,7 @@ class SearchScreen extends ConsumerWidget {
               keyboardType: TextInputType.text,
               hintText: "Search For Foods",
               suffixIcon: _searchController.text.isEmpty
-                  ? Icon(Icons.search, color: Colors.grey)
+                  ? const Icon(Icons.search, color: Colors.grey)
                   : GestureDetector(
                       onTap: () {
                         // Clear the text field when clear icon is tapped
@@ -52,7 +49,7 @@ class SearchScreen extends ConsumerWidget {
                         ref.read(searchQueryProvider.notifier).state =
                             ''; // Clear search query
                       },
-                      child: Icon(Icons.clear, color: Colors.grey),
+                      child: const Icon(Icons.clear, color: Colors.grey),
                     ),
             ),
           ),
@@ -211,9 +208,9 @@ class SearchScreen extends ConsumerWidget {
                       },
                     );
                   },
-                  loading: () => Center(child: Text('')),
-                  error: (error, stackTrace) => Center(
-                    child: Text(''),
+                  loading: () => const Center(child: Text('')),
+                  error: (error, stackTrace) => const Center(
+                    child:  Text(''),
                   ),
                 ),
               const LoadingWidget(),

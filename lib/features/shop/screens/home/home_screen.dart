@@ -5,7 +5,6 @@ import 'package:biriyani/features/shop/controllers/home_controller.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/banner_slider.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/category_list.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/home_header.dart';
-import 'package:biriyani/features/shop/screens/home/widgets/food_list.dart';
 import 'package:biriyani/features/shop/screens/home/widgets/my_dot_navigation.dart';
 import 'package:biriyani/services/get_service_key.dart';
 import 'package:biriyani/services/notification_service.dart';
@@ -32,9 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
     notificationService.getDeviceToken();
     notificationService.firebaseInit(context);
     notificationService.setupInteractMessage(context);
-    
+
     getServiceToken();
   }
+
   Future<void> getServiceToken() async {
     try {
       String serverToken = await _getServerKey.getServerKeyToken();
@@ -72,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
               const RiceWidget(),
               const Heading(title: 'Trending Now'),
               const CurryAndFry(),
-             
             ],
           ),
         ),

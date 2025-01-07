@@ -29,11 +29,9 @@ class _UserProfileTileState extends ConsumerState<UserProfileTile> {
                 .labelMedium!
                 .apply(color: Colors.white)),
         subtitle: Text(
-          user?.userName ?? "What's your name",
-          style: Theme.of(context)
-              .textTheme
-              .labelMedium!
-              .apply(color: Colors.white),
+          user == null ? 'Please log in' : user.userName,
+          style:
+              Theme.of(context).textTheme.bodySmall!.apply(color: Colors.white),
         ),
         trailing: IconButton(
           onPressed: widget.onPressed,

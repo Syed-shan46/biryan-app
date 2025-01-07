@@ -1,18 +1,12 @@
 import 'dart:convert';
-import 'package:biriyani/common/app_style.dart';
-import 'package:biriyani/common/reusable_text.dart';
 import 'package:biriyani/features/authentication/screens/login/phone_verification_page.dart';
 import 'package:biriyani/provider/user_provider.dart';
-import 'package:biriyani/utils/constants/constants.dart';
 import 'package:biriyani/utils/constants/global_variables.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
 
 class DeliveredScreen extends ConsumerStatefulWidget {
@@ -23,10 +17,12 @@ class DeliveredScreen extends ConsumerStatefulWidget {
 }
 
 class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
+  late Future<List<Map<String, dynamic>>> _ordersFuture;
+
   @override
   void initState() {
     super.initState();
-    _fetchOrders();
+    _ordersFuture = _fetchOrders();
   }
 
   Future<List<Map<String, dynamic>>> _fetchOrders() async {
@@ -85,9 +81,9 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
         ),
       );
     }
+
     return FutureBuilder<List<Map<String, dynamic>>>(
-      // FutureBuilder to handle async data fetching
-      future: _fetchOrders(),
+      future: _ordersFuture, // Use the cached future
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -101,8 +97,6 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
             child: Text('No orders found'),
           );
         }
-
-        // If the user is not logged in
 
         final orders = snapshot.data!;
 
