@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class UsernamePage extends ConsumerStatefulWidget {
   final String phone;
@@ -18,12 +19,55 @@ class UsernamePage extends ConsumerStatefulWidget {
 }
 
 class _UsernamePageState extends ConsumerState<UsernamePage> {
-  
   final TextEditingController _usernameController = TextEditingController();
   bool _isLoading = false;
   String? _errorText;
+  bool _usernameExists = false;
+  String title = ""; // Initialize title as an empty string
 
-  Future<void> _updateUsername() async {
+  @override
+  void initState() {
+    super.initState();
+    _checkIfUsernameExists();
+  }
+
+  Future<void> _checkIfUsernameExists() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '$uri/check-username?phoneNumber=${Uri.encodeComponent(widget.phone)}'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          _usernameExists = data['usernameExists'];
+          if (_usernameExists) {
+            _usernameController.text = data['username'] ?? '';
+          }
+          title = _usernameExists
+              ? "Update Username"
+              : "Create Username"; // Update title dynamically
+        });
+      } else {
+        throw Exception('Failed to check username');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error checking username: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _updateOrCreateUsername() async {
     String username = _usernameController.text.trim();
 
     if (username.isEmpty) {
@@ -34,21 +78,14 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
       setState(() {
         _errorText = "Username must be at least 3 characters.";
       });
+      return;
     } else {
-      // Clear error
       setState(() {
         _errorText = null;
       });
     }
 
     final String apiUrl = '$uri/updateUsername';
-
-    if (_usernameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Username cannot be empty')),
-      );
-      return;
-    }
 
     setState(() {
       _isLoading = true;
@@ -63,23 +100,24 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
         },
       );
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
       if (response.statusCode == 200) {
         ref
             .read(userProvider.notifier)
-            .updateUsername(username); // Call in your state management logic
+            .updateUsername(username); // Update state management logic
 
-        Get.snackbar('Username', "Username updated successfully");
+        Get.snackbar(
+          'Username',
+          _usernameExists
+              ? "Username updated successfully"
+              : "Username created successfully",
+        );
 
         Get.offAll(() => const NavigationMenu());
-
-        // Navigate back or to a different page
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('Failed to update username: ${response.body}')),
+              content: Text(
+                  'Failed to ${_usernameExists ? "update" : "create"} username: ${response.body}')),
         );
       }
     } catch (e) {
@@ -100,10 +138,12 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         iconTheme: const IconThemeData(color: Colors.black),
-        title: const Text(
-          "Create Username",
+        title: Text(
+          title.isEmpty ? "Loading..." : title, // Display dynamic title
           style: TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+              color: ThemeUtils.dynamicTextColor(context),
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -114,13 +154,16 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 30),
-              const Text(
-                "Let's Get Started!",
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              Text(
+                _usernameExists ? "Update your username" : "Create a username",
+                style:
+                    const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Text(
-                "Create a username to personalize your experience.",
+                _usernameExists
+                    ? "You already have a username, update or continue."
+                    : "Create a new username to personalize your experience.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: Colors.grey[600]),
               ),
@@ -130,7 +173,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
                 controller: _usernameController,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.grey[100],
+                  fillColor: ThemeUtils.sameBrightness(context),
                   labelText: "Enter a username",
                   hintStyle:
                       TextStyle(color: ThemeUtils.dynamicTextColor(context)),
@@ -151,7 +194,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
                   : SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _updateUsername,
+                        onPressed: _updateOrCreateUsername,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: ThemeUtils.dynamicTextColor(context),
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -160,19 +203,27 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
                           ),
                         ),
                         child: Text(
-                          'Continue',
+                          _usernameExists
+                              ? 'Update'
+                              : 'Create', // Button text update
                           style: TextStyle(
                               fontSize: 16,
                               color: ThemeUtils.sameBrightness(context)),
                         ),
                       ),
                     ),
-              const SizedBox(height: 20),
-              Text(
-                "By continuing, you agree to our Terms & Conditions.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-              ),
+              const SizedBox(height: 12),
+              _usernameExists
+                  ? ElevatedButton(
+                    style: ElevatedButton.styleFrom( 
+                      foregroundColor: ThemeUtils.dynamicTextColor(context),
+                    ),
+                      onPressed: () {
+                        Get.to(() => const NavigationMenu());
+                      },
+                      child: const Text('Go to home'),
+                    )
+                  : const SizedBox.shrink()
             ],
           ),
         ),

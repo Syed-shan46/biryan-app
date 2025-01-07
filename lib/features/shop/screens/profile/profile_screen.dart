@@ -41,8 +41,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: Column(
         children: [
           MyPrimaryHeaderContainer(
-              child: UserProfileTile(),
-              color: ThemeUtils.dynamicTextColor(context)),
+              showContainer: false,
+              color: ThemeUtils.dynamicTextColor(context),
+              child: const UserProfileTile()),
           const SizedBox(
             height: MySizes.spaceBtwItems,
           ),

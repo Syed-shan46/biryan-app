@@ -1,259 +1,236 @@
-import 'package:biriyani/common/custom_shapes/primary_header_container.dart';
-import 'package:biriyani/features/shop/controllers/order_controller.dart';
-import 'package:biriyani/features/shop/models/order_model.dart';
-import 'package:biriyani/provider/order_provider.dart';
+import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/provider/user_provider.dart';
-import 'package:biriyani/utils/constants/sizes.dart';
+import 'package:biriyani/utils/constants/global_variables.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
+import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class OrderScreen extends ConsumerStatefulWidget {
-  const OrderScreen({super.key});
+class UsernamePage extends ConsumerStatefulWidget {
+  final String phone;
+
+  const UsernamePage({required this.phone, Key? key}) : super(key: key);
 
   @override
-  ConsumerState<OrderScreen> createState() => _OrderScreenState();
+  ConsumerState createState() => _UsernamePageState();
 }
 
-class _OrderScreenState extends ConsumerState<OrderScreen> {
+class _UsernamePageState extends ConsumerState<UsernamePage> {
+  final TextEditingController _usernameController = TextEditingController();
+  bool _isLoading = false;
+  String? _errorText;
+  bool _usernameExists = false;
+  String title = ""; // Initialize title as an empty string
+
   @override
   void initState() {
     super.initState();
-    _fetchOrders();
+    _checkIfUsernameExists();
   }
 
-  Future<void> _fetchOrders() async {
-    final user = ref.read(userProvider);
-    if (user != null) {
-      final orderController = OrderController();
-      try {
-        final orders = await orderController.loadOrders(userId: user.id);
-        print('Raw JSON response: $orders');
-        print(user.id);
-        print(
-            'Fetched orders count: ${orders.length}'); // Debug log for orders count
-        ref.read(orderProvider.notifier).setOrders(orders);
-      } catch (e) {
-        print('Error fetching orders: $e');
+  Future<void> _checkIfUsernameExists() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '$uri/check-username?phoneNumber=${Uri.encodeComponent(widget.phone)}'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          _usernameExists = data['usernameExists'];
+          if (_usernameExists) {
+            _usernameController.text = data['username'] ?? '';
+          }
+          title = _usernameExists
+              ? "Update Username"
+              : "Create Username"; // Update title dynamically
+        });
+      } else {
+        throw Exception('Failed to check username');
       }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error checking username: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _updateOrCreateUsername() async {
+    String username = _usernameController.text.trim();
+
+    if (username.isEmpty) {
+      setState(() {
+        _errorText = "Username cannot be empty.";
+      });
+    } else if (username.length < 3) {
+      setState(() {
+        _errorText = "Username must be at least 3 characters.";
+      });
+      return;
     } else {
-      print('Error: User is null');
+      setState(() {
+        _errorText = null;
+      });
+    }
+
+    final String apiUrl =
+        _usernameExists ? '$uri/updateUsername' : '$uri/createUsername';
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await http.patch(
+        Uri.parse(apiUrl),
+        body: {
+          'phone': widget.phone, // Pass phone number
+          'username': _usernameController.text,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        ref
+            .read(userProvider.notifier)
+            .updateUsername(username); // Update state management logic
+
+        Get.snackbar(
+          'Username',
+          _usernameExists
+              ? "Username updated successfully"
+              : "Username created successfully",
+        );
+
+        Get.offAll(() => const NavigationMenu());
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Failed to ${_usernameExists ? "update" : "create"} username: ${response.body}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating username: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final orders = ref.watch(orderProvider);
     return Scaffold(
-      body: orders.isEmpty
-          ? Column(
-              children: [
-                Lottie.network(
-                  'https://lottie.host/e5c80fca-fe94-4bed-9424-e0d70204d1aa/lhGyjYqBYY.json',
-                  width: 350,
-                  height: 350,
-                  fit: BoxFit.fill,
-                ),
-                const Center(
-                  child: Text('No orders found'),
-                ),
-              ],
-            )
-          : Column(
-              children: [
-                const SizedBox(height: MySizes.spaceBtwItems),
-                Expanded(
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: MySizes.spaceBtwItems,
-                    ),
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) {
-                      final Order order = orders[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          children: [
-                            
-                            Container(
-                              decoration: BoxDecoration(
-                                color: isDarkMode
-                                    ? Colors.grey.withOpacity(0.1)
-                                    : DynamicBg.sameBrightness(
-                                        context), // Base color for the box
-                                boxShadow: isDarkMode
-                                    ? [] // No shadow in dark mode
-                                    : [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(
-                                              0.1), // Shadow color for light mode
-                                          blurRadius: 50,
-                                          offset: const Offset(0, 10),
-                                        ),
-                                      ],
-                                // No border in light mode
-                                borderRadius: BorderRadius.circular(
-                                    12), // Optional rounded corners
-                              ),
-                              width: MediaQuery.of(context).size.width,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        // image
-                                        Container(
-                                            width: 65,
-                                            height: 65,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.primaryColor
-                                                    .withOpacity(0.1),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Image.network(order.image[0])),
-
-                                        const SizedBox(
-                                            width: MySizes.spaceBtwItems),
-
-                                        /// title, price, size
-                                        Expanded(
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  /// Category
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            color: isDarkMode
-                                                                ? AppColors
-                                                                    .primaryColor
-                                                                    .withOpacity(
-                                                                        0.8)
-                                                                : AppColors
-                                                                    .primaryColor
-                                                                    .withOpacity(
-                                                                        0.1),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        4)),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 8,
-                                                                vertical: 0),
-                                                        child: Text(
-                                                            order.category[0]),
-                                                      )
-                                                    ],
-                                                  ),
-
-                                                  /// Price
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        '₹${order.totalAmount}',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge,
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-
-                                              const SizedBox(height: 2),
-
-                                              /// Product name
-                                              Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    order.productName[0],
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .labelMedium,
-                                                  )),
-
-                                              const SizedBox(height: 2),
-
-                                              /// Quantity
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      InkWell(
-                                                          child: Text(
-                                                        order.orderStatus,
-                                                        style: TextStyle(
-                                                            color: order.orderStatus ==
-                                                                    'Processing'
-                                                                ? Colors.red
-                                                                : Colors.blue),
-                                                      ))
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text(order.quantity
-                                                          .toString())
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                        height: MySizes.spaceBtwItems / 2),
-                                    Text(
-                                      'Delivery address',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                    const SizedBox(height: 3),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          'To: ${order.name}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                        Text('${order.phone} ${order.address}')
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: Text(
+          title.isEmpty ? "Loading..." : title, // Display dynamic title
+          style: const TextStyle(
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 30),
+              Text(
+                _usernameExists ? "Update your username" : "Create a username",
+                style:
+                    const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                _usernameExists
+                    ? "You already have a username, update it to continue."
+                    : "Create a new username to personalize your experience.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 40),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  labelText: "Enter a username",
+                  hintStyle:
+                      TextStyle(color: ThemeUtils.dynamicTextColor(context)),
+                  hintText: "e.g., johndoe123",
+                  labelStyle: TextStyle(color: Colors.grey[700]),
+                  prefixIcon:
+                      const Icon(Icons.person, color: AppColors.accentColor),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
                   ),
+                  errorText: _errorText,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _updateOrCreateUsername,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ThemeUtils.dynamicTextColor(context),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          _usernameExists
+                              ? 'Update'
+                              : 'Create', // Button text update
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: ThemeUtils.sameBrightness(context)),
+                        ),
+                      ),
+                    ),
+              const SizedBox(height: 20),
+              Text(
+                "By continuing, you agree to our Terms & Conditions.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              _usernameExists
+                  ? ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => const NavigationMenu());
+                      },
+                      child: const Text('Go to home'))
+                  : const SizedBox.shrink()
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
+
+
+
