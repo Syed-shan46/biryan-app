@@ -1,7 +1,7 @@
 import 'package:biriyani/features/shop/screens/cart/cart_screen.dart';
 import 'package:biriyani/features/shop/screens/home/home_screen.dart';
+import 'package:biriyani/features/shop/screens/location.dart';
 import 'package:biriyani/features/shop/screens/profile/profile_screen.dart';
-import 'package:biriyani/features/shop/screens/search/search_screen.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,18 +35,14 @@ class _NavigationMenuState extends State<NavigationMenu> {
               selectedIndex: controller.selectedIndex.value,
               onTabChange: controller.changeTabIndex, // Use the method
               gap: 8,
-
               tabs: const [
+                GButton(icon: Iconsax.home5, text: 'Home'),
                 GButton(
-                  icon: Iconsax.home5,
-                  text: 'Home',
+                  icon: Iconsax.search_favorite,
+                  text: 'Search',
                 ),
-                GButton(icon: Iconsax.search_favorite, text: 'Search'),
                 GButton(icon: Iconsax.shopping_cart, text: 'Cart'),
-                GButton(
-                  icon: CupertinoIcons.person,
-                  text: 'Profile',
-                )
+                GButton(icon: CupertinoIcons.person, text: 'Profile')
               ],
             ),
           ),
@@ -62,7 +58,7 @@ class NavigationController extends GetxController {
 
   final screens = [
     const HomeScreen(),
-    SearchScreen(),
+    const MyLocation(),
     const CartScreen(),
     const ProfileScreen(),
   ];
