@@ -9,7 +9,7 @@ class SocketService {
   void initialize() {
     socket = IO.io(uri, {
       'transports': 'websocket',
-       'autoConnect': false,  // Optional: Auto-connect behavior
+      'autoConnect': false, // Optional: Auto-connect behavior
     });
 
     socket.on('connect', (_) {

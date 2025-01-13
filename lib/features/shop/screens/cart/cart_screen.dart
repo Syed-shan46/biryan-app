@@ -201,7 +201,6 @@ class _CartScreenState extends ConsumerState<CartScreen>
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
-    const welcomeOffer = 50;
     final cartData = ref.watch(cartProvider);
     final totalAmount = getTotalAmount(cartData);
 
