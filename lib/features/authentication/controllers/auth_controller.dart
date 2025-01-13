@@ -1,5 +1,7 @@
+import 'package:biriyani/navigation_menu.dart';
 import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/utils/constants/global_variables.dart';
+import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,8 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 final providerContainer = ProviderContainer();
 
 class AuthController {
-  // API call to create the user in the backend
-  Future<void> handleUserCheck(String phoneNumber, WidgetRef ref) async {
+  // API call to create the user in the backends
+  Future<void> handleUserCheck(
+      String phoneNumber, username, WidgetRef ref) async {
     String apiUrl = '$uri/checkUser';
 
     try {
@@ -30,6 +33,7 @@ class AuthController {
         body: json.encode({
           'phone': phoneNumber,
           'userDeviceToken': userDeviceToken,
+          'username': username,
         }),
       );
 
@@ -45,6 +49,7 @@ class AuthController {
           await preferences.setString('auth_token', token);
           await preferences.setString('user', jsonEncode(userJson));
           ref.read(userProvider.notifier).setUser(jsonEncode(userJson));
+          Get.to(() => const NavigationMenu());
           print('User set to state: $userJson');
         } else {
           print('User or token is null in response');
@@ -75,7 +80,8 @@ class AuthController {
 
       // Show success message
       Get.snackbar('Logout', 'Logout Successfully',
-          icon: const Icon(Icons.logout));
+          icon: const Icon(Icons.logout),
+          backgroundColor: AppColors.primaryColor.withOpacity(0.7));
     } catch (e) {
       // Show error message in case of any issues
       Get.snackbar('Error', 'Error signing out: $e');

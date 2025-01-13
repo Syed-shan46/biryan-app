@@ -2,6 +2,7 @@ import 'package:biriyani/features/shop/screens/cart/cart_screen.dart';
 import 'package:biriyani/features/shop/screens/home/home_screen.dart';
 import 'package:biriyani/features/shop/screens/location.dart';
 import 'package:biriyani/features/shop/screens/profile/profile_screen.dart';
+import 'package:biriyani/features/shop/screens/search/search_screen.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -23,9 +23,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_map/flutter_map.dart' as flutter_map;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:http/http.dart' as http;
@@ -44,6 +48,10 @@ class _CartScreenState extends ConsumerState<CartScreen>
     with SingleTickerProviderStateMixin {
   NotificationService notificationService = NotificationService();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  String coordinates = "No Location found";
+  String address = 'No Address found';
+  bool scanning = false;
+  LatLng? currentLocation; // For map center and marker
 
   bool? hasOrderedBefore;
   int discount = 0; // Default discount value
@@ -80,6 +88,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
+    checkPermission();
     super.initState();
   }
 
@@ -105,6 +114,90 @@ class _CartScreenState extends ConsumerState<CartScreen>
     return total;
   }
 
+  // Check permissions and fetch location
+  Future<void> checkPermission() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Fluttertoast.showToast(msg: 'Location services are disabled.');
+      await Geolocator.openLocationSettings();
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Fluttertoast.showToast(msg: 'Location permission denied.');
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Fluttertoast.showToast(
+          msg: 'Location permissions are permanently denied.');
+      return;
+    }
+
+    getLocation();
+  }
+
+  // Get the current location and update the UI
+  Future<void> getLocation() async {
+    setState(() {
+      scanning = true;
+    });
+
+    try {
+      // Use locationSettings for specifying accuracy
+      LocationSettings locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.bestForNavigation,
+      );
+
+      // Get the current position
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: locationSettings,
+      );
+
+      setState(() {
+        currentLocation = LatLng(position.latitude, position.longitude);
+        coordinates = '${position.latitude},${position.longitude}';
+      });
+
+      // Call Nominatim API to get address
+      await fetchAddressFromNominatim(position.latitude, position.longitude);
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error: ${e.toString()}");
+      print("Error: ${e.toString()}");
+    }
+
+    setState(() {
+      scanning = false;
+    });
+  }
+
+  // Fetch address using Nominatim API
+  Future<void> fetchAddressFromNominatim(
+      double latitude, double longitude) async {
+    final url =
+        'https://nominatim.openstreetmap.org/reverse?format=json&lat=$latitude&lon=$longitude';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          address = data['display_name'] ?? 'No Address Found';
+        });
+      } else {
+        Fluttertoast.showToast(msg: 'Failed to fetch address from Nominatim.');
+        print('Error: ${response.body}');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Error: ${e.toString()}');
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
@@ -121,7 +214,6 @@ class _CartScreenState extends ConsumerState<CartScreen>
     });
 
     final frUser = FirebaseAuth.instance.currentUser;
-    final cartProvide = ref.read(cartProvider.notifier);
     ref.watch(cartProvider); // Watch for cart state changes
 
     final OrderController _orderController = OrderController();
@@ -169,7 +261,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                           await _orderController.createOrders(
                             name: user.userName,
                             phone: user.phone,
-                            address: user.userName,
+                            address: address,
                             id: user.id,
                             productName: productNames,
                             quantity: quantities,
@@ -180,6 +272,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                             paymentStatus: 'Success',
                             orderStatus: 'Processing',
                             delivered: false,
+                            latLong: coordinates,
                             customerDeviceToken: getCustomerDeviceToken(),
                             context: context,
                           );
@@ -264,6 +357,39 @@ class _CartScreenState extends ConsumerState<CartScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: 200,
+                    child: currentLocation == null
+                        ? const Center(child: Text('Fetching map...'))
+                        : flutter_map.FlutterMap(
+                            options: flutter_map.MapOptions(
+                              initialCenter: currentLocation!,
+                              initialZoom: 15.0,
+                            ),
+                            children: [
+                              flutter_map.TileLayer(
+                                urlTemplate:
+                                    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                              ),
+                              flutter_map.MarkerLayer(
+                                markers: [
+                                  flutter_map.Marker(
+                                    point: currentLocation!,
+                                    width: 50.0,
+                                    height: 50.0,
+                                    rotate: true,
+                                    child: const Icon(
+                                      Icons.location_pin,
+                                      size: 50.0,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                  ),
+
                   /// Text
                   const Padding(
                     padding: EdgeInsets.only(left: 30, top: 10),
@@ -396,7 +522,10 @@ class _CartScreenState extends ConsumerState<CartScreen>
                                                             color: isInCart
                                                                 ? AppColors
                                                                     .primaryColor
-                                                                : ThemeUtils.dynamicTextColor(context).withOpacity(0.8),
+                                                                : ThemeUtils.dynamicTextColor(
+                                                                        context)
+                                                                    .withOpacity(
+                                                                        0.8),
                                                             shape:
                                                                 BoxShape.circle,
                                                           ),
@@ -727,7 +856,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                 const SizedBox(height: MySizes.spaceBtwItems),
                 ElevatedButton(
                     onPressed: () {
-                      Get.to(() => const PhoneVerificationPage());
+                      Get.to(() => const PhoneUserNameScreen());
                     },
                     child: Text('Verify Account',
                         style: TextStyle(

@@ -117,26 +117,66 @@ class _PhoneVerificationPageState extends ConsumerState<PhoneVerificationPage> {
 //               Get.offAll(() => UsernamePage(phone: phoneNumber));
 //             }
 
-// controller 
+// controller
 Future<void> handleUserCheck(String phoneNumber, WidgetRef ref) async {
-    try {
-      // Check if the user already exists in the database
-      bool usernameExists = await UsernameController.checkUsername(phoneNumber);
+  try {
+    // Check if the user already exists in the database
+    bool usernameExists = await UsernameController.checkUsername(phoneNumber);
 
-      if (usernameExists) {
-        // User already has a username, proceed to the main menu or home screen
-        print('User exists, proceeding to the main menu.');
-        // Navigate to the main menu or home screen after successful login
-        Get.offAll(() => const NavigationMenu()); // Replace with your actual screen
-      } else {
-        // User doesn't have a username, redirect them to the username creation screen
-        print(
-            'No username found. Redirecting to the username creation screen.');
-        Get.offAll(() => UsernamePage(
-              phone: phoneNumber,
-            ));
-      }
-    } catch (error) {
-      print('Error in checking user: $error');
+    if (usernameExists) {
+      // User already has a username, proceed to the main menu or home screen
+      print('User exists, proceeding to the main menu.');
+      // Navigate to the main menu or home screen after successful login
+      Get.offAll(
+          () => const NavigationMenu()); // Replace with your actual screen
+    } else {
+      // User doesn't have a username, redirect them to the username creation screen
+      print('No username found. Redirecting to the username creation screen.');
+      Get.offAll(() => UsernamePage(
+            phone: phoneNumber,
+          ));
     }
+  } catch (error) {
+    print('Error in checking user: $error');
   }
+}
+
+
+// Future<void> getLocation() async {
+//     try {
+//       // Get current position
+//       LocationSettings locationSettings = const LocationSettings(
+//         accuracy: LocationAccuracy.bestForNavigation, // Best GPS accuracy
+//       );
+
+//       // Get the current position
+//       Position position = await Geolocator.getCurrentPosition(
+//         locationSettings: locationSettings,
+//       );
+
+//       setState(() {
+//         coordinates =
+//             'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
+//       });
+
+//       // Reverse geocoding with Nominatim
+//       String url =
+//           "https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.latitude}&lon=${position.longitude}&key=$apiKey";
+//       var response = await http.get(Uri.parse(url));
+
+//       if (response.statusCode == 200) {
+//         var data = json.decode(response.body);
+//         setState(() {
+//           address = data['display_name'] ?? 'No address found';
+//         });
+//       } else {
+//         setState(() {
+//           address = 'Failed to fetch address';
+//         });
+//       }
+//     } catch (e) {
+//       setState(() {
+//         address = 'Error: ${e.toString()}';
+//       });
+//     }
+//   }

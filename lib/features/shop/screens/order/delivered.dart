@@ -67,7 +67,7 @@ class _DeliveredScreenState extends ConsumerState<DeliveredScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Get.to(() => const PhoneVerificationPage());
+                Get.to(() => const PhoneUserNameScreen());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,

@@ -10,7 +10,6 @@ import 'package:biriyani/features/shop/screens/wishlist/wish_list_screen.dart';
 import 'package:biriyani/provider/theme_notifier.dart';
 import 'package:biriyani/provider/user_provider.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
-import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:biriyani/utils/themes/theme_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -201,7 +200,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   onTap: () {
                     if (user == null) {
                       // Redirect to Login
-                      Get.to(() => const PhoneVerificationPage());
+                      Get.to(() => const PhoneUserNameScreen());
                     } else {
                       // Logout logic
 

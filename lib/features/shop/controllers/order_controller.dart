@@ -20,6 +20,7 @@ class OrderController {
     required final String paymentStatus,
     required final String orderStatus,
     required final bool delivered,
+    required final String latLong,
     required final Future<String> customerDeviceToken,
     required context,
   }) async {
@@ -40,6 +41,7 @@ class OrderController {
         orderStatus: orderStatus,
         delivered: delivered,
         customerDeviceToken: deviceToken,
+        latLong: latLong,
       );
 
       http.Response response = await http.post(

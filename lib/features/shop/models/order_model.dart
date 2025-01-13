@@ -1,4 +1,4 @@
-import 'dart:convert';  
+import 'dart:convert';
 
 class Order {
   final String userId;
@@ -15,6 +15,7 @@ class Order {
   final String orderStatus;
   final bool delivered;
   final String customerDeviceToken;
+  final String latLong;
 
   Order(
       {required this.userId,
@@ -30,6 +31,7 @@ class Order {
       required this.paymentStatus,
       required this.orderStatus,
       required this.delivered,
+      required this.latLong,
       required this.customerDeviceToken});
 
   Map<String, dynamic> toMap() {
@@ -47,7 +49,8 @@ class Order {
       'paymentStatus': paymentStatus,
       'orderStatus': orderStatus,
       'delivered': delivered,
-      'customerDeviceToken': customerDeviceToken
+      'customerDeviceToken': customerDeviceToken,
+      'latLong': latLong,
     };
   }
 
@@ -71,6 +74,8 @@ class Order {
       paymentStatus: map['paymentStatus'] as String? ?? 'Pending',
       orderStatus: map['orderStatus'] as String? ?? '',
       customerDeviceToken: map['customerDeviceToken'] as String? ?? '',
+      latLong: map['latLong'] as String? ?? '',
+
       delivered: map['delivered'] == true ||
           map['delivered'] == 'true' ||
           map['delivered'] == 1,

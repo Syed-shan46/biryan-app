@@ -70,7 +70,9 @@ class _FoodWidgetState extends ConsumerState<FoodWidget> {
         );
       },
       child: Padding(
-        padding: EdgeInsets.only(right: 12.w,),
+        padding: EdgeInsets.only(
+          right: 12.w,
+        ),
         child: LayoutBuilder(builder: (context, constraints) {
           return Container(
             width: width * .41,
@@ -79,7 +81,6 @@ class _FoodWidgetState extends ConsumerState<FoodWidget> {
               // Use Column instead of ListView
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-               
                 // Image Section
                 Stack(
                   children: [
