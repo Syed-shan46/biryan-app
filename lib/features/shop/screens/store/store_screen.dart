@@ -1,7 +1,6 @@
 import 'package:biriyani/common/app_style.dart';
 import 'package:biriyani/common/cart/cart_icon.dart';
 import 'package:biriyani/common/custom_shapes/primary_header_container.dart';
-import 'package:biriyani/common/custom_text_field.dart';
 import 'package:biriyani/features/shop/controllers/category_controller.dart';
 import 'package:biriyani/features/shop/screens/search/search_screen.dart';
 import 'package:biriyani/features/shop/screens/store/widgets/store_food_column.dart';
@@ -87,6 +86,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                                   Get.to(() => SearchScreen());
                                 },
                                 child: TextFormField(
+                                  onTap: () {
+                                    Get.to(() => SearchScreen());
+                                  },
+                                  readOnly: true,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(9.r),

@@ -326,7 +326,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
                       ),
                     ),
                     child: Text(
-                      'Place Order ₹${totalAmount - welcomeOffer}',
+                      'Place Order ₹${totalAmount - discount}',
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
@@ -388,7 +388,13 @@ class _CartScreenState extends ConsumerState<CartScreen>
                               ),
                             ],
                           ),
-                  ),
+                  ).animate().slideY(
+                        begin: 1, // Start below the screen
+                        end: 0, // End at normal position
+                        curve: Curves.easeInOut,
+                        delay: const Duration(milliseconds: 400),
+                        duration: const Duration(milliseconds: 500),
+                      ),
 
                   /// Text
                   const Padding(

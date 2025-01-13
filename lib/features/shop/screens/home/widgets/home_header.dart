@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:biriyani/features/shop/controllers/user_location_controller.dart';
 import 'package:biriyani/utils/constants/sizes.dart';
 import 'package:biriyani/utils/themes/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -183,48 +181,5 @@ class _HomeHeaderState extends State<HomeHeader> {
     } else {
       return ' 🌙 ';
     }
-  }
-
-  Future<void> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    _getCurrentLocation();
-  }
-
-  Future<void> _getCurrentLocation() async {
-    final controller = Get.put(UserLocationController());
-    Position position = await Geolocator.getCurrentPosition();
-    LatLng currentLocation = LatLng(position.latitude, position.longitude);
-    controller.setPosition(currentLocation);
-    controller.getUserAddress(currentLocation);
-    print(currentLocation);
   }
 }

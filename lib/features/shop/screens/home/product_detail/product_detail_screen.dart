@@ -64,7 +64,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       setState(() {
         _showBottomNav = true;
       });
-      
     });
   }
 
@@ -308,32 +307,8 @@ class _BottomNavigationBtnState extends ConsumerState<BottomNavigationBtn> {
     }
 
     // Update quantity
-    void increaseQuantity() {
-      final newQuantity = currentQuantity + 1;
-      ref
-          .read(cartProvider.notifier)
-          .updateQuantity(widget.product.id, newQuantity);
-    }
-
-    void decreaseQuantity() {
-      if (currentQuantity > 1) {
-        final newQuantity = currentQuantity - 1;
-        ref
-            .read(cartProvider.notifier)
-            .updateQuantity(widget.product.id, newQuantity);
-      }
-    }
 
     // Collect selected items
-    void updateSelectedItems(Item item, bool isSelected) {
-      setState(() {
-        if (isSelected) {
-          selectedItems.add(item); // Add item to selected list
-        } else {
-          selectedItems.remove(item); // Remove item from selected list
-        }
-      });
-    }
 
     return Container(
       width: MediaQuery.of(context).size.width,

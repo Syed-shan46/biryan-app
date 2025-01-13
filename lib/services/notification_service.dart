@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
-import 'package:biriyani/features/shop/screens/home/home_screen.dart';
 import 'package:biriyani/features/shop/screens/notifications/notification_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -41,11 +40,6 @@ class NotificationService {
   }
 
   Future<String> getDeviceToken() async {
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
     String? token = await messaging.getToken();
     print('token=> $token');
     return token!;
@@ -71,7 +65,6 @@ class NotificationService {
   void firebaseInit(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
       RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification!.android;
       if (kDebugMode) {
         print("notification title: ${notification!.title}");
         print("notification body: ${notification.body}");

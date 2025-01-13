@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -18,6 +20,8 @@ class _MyLocationState extends State<MyLocation> {
   final Color myColor = const Color.fromRGBO(128, 178, 247, 1);
   String coordinates = "No Location found";
   String address = 'No Address found';
+  StreamSubscription<Position>? locationSubscription;
+  Stream<Position> get locationStream => Geolocator.getPositionStream();
   bool scanning = false;
 
   LatLng? currentLocation; // For map center and marker
@@ -25,7 +29,21 @@ class _MyLocationState extends State<MyLocation> {
   @override
   void initState() {
     super.initState();
-    checkPermission();
+
+    locationSubscription = locationStream.listen((locationData) {
+      if (mounted) {
+        setState(() {
+          currentLocation =
+              LatLng(locationData.latitude, locationData.longitude);
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    locationSubscription?.cancel(); // Stop listening to location updates
+    super.dispose();
   }
 
   // Check permissions and fetch location
@@ -113,6 +131,42 @@ class _MyLocationState extends State<MyLocation> {
     }
   }
 
+  // Build the map widget
+  Widget buildMap() {
+    if (currentLocation == null) {
+      return const Center(child: Text('Fetching map...'));
+    }
+
+    return FlutterMap(
+      options: MapOptions(
+        initialCenter: currentLocation!,
+        initialZoom: 15.0,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+          subdomains: ['a', 'b', 'c'],
+          userAgentPackageName: 'com.biriyani.app',
+        ),
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: currentLocation!,
+              width: 50.0,
+              height: 50.0,
+              rotate: true,
+              child: const Icon(
+                Icons.location_pin,
+                size: 50.0,
+                color: Colors.red,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,39 +215,7 @@ class _MyLocationState extends State<MyLocation> {
                   ),
                 ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: 200,
-            child: currentLocation == null
-                ? const Center(child: Text('Fetching map...'))
-                : FlutterMap(
-                    options: MapOptions(
-                      initialCenter: currentLocation!,
-                      initialZoom: 15.0,
-                    ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        userAgentPackageName: 'com.biriyani.app',
-                      ),
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: currentLocation!,
-                            width: 50.0,
-                            height: 50.0,
-                            rotate: true,
-                            child: const Icon(
-                              Icons.location_pin,
-                              size: 50.0,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-          ),
+          SizedBox(height: 200, child: buildMap()),
           ElevatedButton.icon(
             onPressed: () {
               checkPermission();
